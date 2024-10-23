@@ -36,7 +36,7 @@ bld/
 .vscode/
 
 # wwwroot folder containing static assets for Blazor
-wwwroot/
+# wwwroot/
 
 # Blazor-specific build outputs
 **/bin/Release/net6.0/blazor/
