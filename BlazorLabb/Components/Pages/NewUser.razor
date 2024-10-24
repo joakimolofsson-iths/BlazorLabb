@@ -5,6 +5,74 @@
 
 <h1>New User</h1>
 
+<EditForm Model="newUser" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @if(!newUserSaved)
+    {
+        <p>Add a new user:</p>
+        <div>
+            <InputText placeholder="Name" @bind-Value="newUser.Name" />
+            <br />
+            <InputText placeholder="E-mail" @bind-Value="newUser.Email" />
+            <br />
+            <InputText placeholder="Street" @bind-Value="newUser.UserAddress.Street" />
+            <br />
+            <InputText placeholder="City" @bind-Value="newUser.UserAddress.City" />
+            <br />
+            <InputText placeholder="ZIP Code" @bind-Value="newUser.UserAddress.ZipCode" />
+            <br />
+            <InputText placeholder="Company Name" @bind-Value="newUser.UserCompany.Name" />
+            <br />
+            <InputText placeholder="Company Catchpharse" @bind-Value="newUser.UserCompany.Catchphrase" />
+        </div>
+
+        <button type="submit">Save New User</button>
+    }
+    else
+    {
+        <p style="color: green">You have saved the following user:</p>
+        <p>Name: @newUser.Name</p>
+        <p>E-Mail: @newUser.Email</p>
+        <p>Street: @newUser.UserAddress.Street</p>
+        <p>City: @newUser.UserAddress.City</p>
+        <p>ZIP Code: @newUser.UserAddress.ZipCode</p>
+        <p>Company Name: @newUser.UserCompany.Name</p>
+        <p>Company Catchpharse: @newUser.UserCompany.Catchphrase</p>
+    }    
+
+</EditForm>
+
 @code {
-    
+    private User newUser = new User();
+    private bool newUserSaved = false;
+
+    private void HandleSubmit()
+    {
+        newUserSaved = true;
+    }
+
+    public class User
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+
+        public Address UserAddress { get; set; } = new Address();
+        public Company UserCompany { get; set; } = new Company();
+    }
+
+    public class Address
+    {
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string ZipCode { get; set; }
+    }
+
+    public class Company
+    {
+        public string Name { get; set; }
+        public string Catchphrase { get; set; }
+    }
 }
