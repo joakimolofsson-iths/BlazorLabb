@@ -1,0 +1,39 @@
+﻿@page "/users"
+@rendermode InteractiveServer
+
+<PageTitle>Users</PageTitle>
+
+<h3>Users</h3>
+
+@if (loadingUsers)
+{
+    <p>Loading users...</p>
+}
+else
+{
+    <button @onclick="ShowAllUsers">Show All Users</button>
+    <ul>
+        <li>User 1</li>
+        <li>User 2</li>
+        <li>User 3</li>
+    </ul>
+}
+
+@code {
+    private bool loadingUsers = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(1000);
+            loadingUsers = false;
+            StateHasChanged();
+        }
+    }
+
+    public void ShowAllUsers()
+    {
+        
+    }
+}
