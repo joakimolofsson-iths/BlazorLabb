@@ -1,39 +1,85 @@
 ﻿@page "/users"
 @rendermode InteractiveServer
+@using BlazorLabb.Models
 
 <PageTitle>Users</PageTitle>
 
 <h3>Users</h3>
 
-@if (loadingUsers)
+@if (_loadingUsers)
 {
     <p>Loading users...</p>
 }
 else
 {
-    <button @onclick="ShowAllUsers">Show All Users</button>
+    <button @onclick="ShowAllUsers">@(!_showAll ? "Show All Users" : "Show First Five Users")</button>
+
     <ul>
-        <li>User 1</li>
-        <li>User 2</li>
-        <li>User 3</li>
+        @foreach(var user in GetUsers())
+        {
+            <li>@user.Id | @user.Name | @user.Email | @user.UserAddress.Street | @user.UserAddress.City | @user.UserAddress.ZipCode | @user.UserCompany.Name | @user.UserCompany.Catchphrase</li>
+        }
     </ul>
 }
 
 @code {
-    private bool loadingUsers = true;
+    private bool _loadingUsers = true;
+    private bool _showAll = false;
+    private List<User> _localUsers = new List<User>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await Task.Delay(1000);
-            loadingUsers = false;
+            _loadingUsers = false;
+            GenerateLocalUsers();
             StateHasChanged();
         }
     }
 
-    public void ShowAllUsers()
+    //To do: Skapa en separat class med alla metoder som har med skapande av users...
+    private void GenerateLocalUsers()
     {
-        
+        string[] names = { "Emma Hayes", "Liam Carter", "Ava Brooks", "Noah Hughes", "Mia Bennett", "Ethan Price", "Sophia Rogers", "Oliver Reed", "Isabella Morgan", "Lucas Green" };
+        string[] emails = { "bluefox87@mail.com", "sparklewave42@inbox.com", "sunnyclouds23@webmail.com", "silverstream55@netmail.com", "moonlitowl78@fastmail.com", "crimsonleaf91@mailbox.com", "goldenpetal34@postmail.com", "starfall16@freemail.com", "shimmeringsky45@quickmail.com", "wildriver82@openmail.com" };
+        string[] streets = { "123 Maple St.", "456 Oak Ave.", "789 Pine Rd.", "101 Cedar Blvd.", "202 Birch Ln.", "303 Walnut St.", "404 Elm Dr.", "505 Chestnut Pl.", "606 Spruce Ct.", "707 Redwood Ter." };
+        string[] cities = { "Springfield", "Rivertown", "Mapleton", "Brookside", "Lakeview", "Hillside", "Fairview", "Greendale", "Sunnydale", "Willowbrook" };
+        string[] zipCodes = { "12345", "23456", "34567", "45678", "56789", "67890", "78901", "89012", "90123", "01234" };
+        string[] companyNames = { "Greenfield Corp.", "Skyline Ventures", "Sunrise Innovations", "Peak Solutions", "Global Synergy", "BrightPath LLC", "NextGen Labs", "Blue Horizon Inc.", "Edge Dynamics", "VividTech" };
+        string[] companyCatchphrases = { "Innovate Your Future", "Bringing Ideas to Life", "Where Vision Meets Reality", "Beyond the Horizon", "Empowering Possibilities", "Inspiring Growth", "Redefining Excellence", "The Future, Today", "Shaping Tomorrow", "Excellence Through Innovation" };
+
+        var generatedUsers = new List<User>();
+        //var random = new Random();
+
+        for (int i = 0; i < 10; i++)
+        {
+            //int randomNumber = random.Next(0, 10);
+            generatedUsers.Add(new User(i + 1, names[i], emails[i], streets[i], cities[i], zipCodes[i], companyNames[i], companyCatchphrases[i]));
+        }
+
+        _localUsers = generatedUsers;
+    }
+
+    private List<User> GetUsers()
+    {
+        var sortUserByName = new List<User>();
+
+        if(!_showAll)
+        {
+            sortUserByName = _localUsers.OrderBy(user => user.Name).Take(5).ToList();
+        }
+        else
+        {
+            sortUserByName = _localUsers.OrderBy(user => user.Name).ToList();
+        }
+
+        return sortUserByName;
+    }
+
+    private void ShowAllUsers()
+    {
+        _showAll = !_showAll;
+        StateHasChanged();
     }
 }

@@ -6,27 +6,27 @@
 
 <h1>New User</h1>
 
-<EditForm Model="newUser" OnValidSubmit="HandleSubmit">
+<EditForm Model="_newUser" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    @if(!newUserSaved)
+    @if (!_newUserSaved)
     {
         <p>Add a new user:</p>
         <div>
-            <InputText placeholder="Name" @bind-Value="newUser.Name" />
+            <InputText placeholder="Name" @bind-Value="_newUser.Name" />
             <br />
-            <InputText placeholder="E-mail" @bind-Value="newUser.Email" />
+            <InputText placeholder="E-mail" @bind-Value="_newUser.Email" />
             <br />
-            <InputText placeholder="Street" @bind-Value="newUser.UserAddress.Street" />
+            <InputText placeholder="Street" @bind-Value="_newUser.UserAddress.Street" />
             <br />
-            <InputText placeholder="City" @bind-Value="newUser.UserAddress.City" />
+            <InputText placeholder="City" @bind-Value="_newUser.UserAddress.City" />
             <br />
-            <InputText placeholder="ZIP Code" @bind-Value="newUser.UserAddress.ZipCode" />
+            <InputText placeholder="ZIP Code" @bind-Value="_newUser.UserAddress.ZipCode" />
             <br />
-            <InputText placeholder="Company Name" @bind-Value="newUser.UserCompany.Name" />
+            <InputText placeholder="Company Name" @bind-Value="_newUser.UserCompany.Name" />
             <br />
-            <InputText placeholder="Company Catchpharse" @bind-Value="newUser.UserCompany.Catchphrase" />
+            <InputText placeholder="Company Catchpharse" @bind-Value="_newUser.UserCompany.Catchphrase" />
         </div>
 
         <button type="submit">Save New User</button>
@@ -34,23 +34,25 @@
     else
     {
         <p style="color: green">You have saved the following user:</p>
-        <p>Name: @newUser.Name</p>
-        <p>E-Mail: @newUser.Email</p>
-        <p>Street: @newUser.UserAddress.Street</p>
-        <p>City: @newUser.UserAddress.City</p>
-        <p>ZIP Code: @newUser.UserAddress.ZipCode</p>
-        <p>Company Name: @newUser.UserCompany.Name</p>
-        <p>Company Catchpharse: @newUser.UserCompany.Catchphrase</p>
+        <p>Name: @_newUser.Name</p>
+        <p>E-Mail: @_newUser.Email</p>
+        <p>Street: @_newUser.UserAddress.Street</p>
+        <p>City: @_newUser.UserAddress.City</p>
+        <p>ZIP Code: @_newUser.UserAddress.ZipCode</p>
+        <p>Company Name: @_newUser.UserCompany.Name</p>
+        <p>Company Catchpharse: @_newUser.UserCompany.Catchphrase</p>
     }    
 
 </EditForm>
 
 @code {
-    private User newUser = new User();
-    private bool newUserSaved = false;
+    private User _newUser = new User();
+    private bool _newUserSaved = false;
 
     private void HandleSubmit()
     {
-        newUserSaved = true;
+        _newUserSaved = true;
     }
+
+    //To do: Lägg till en ny skapad user till dina local skapade users...
 }
