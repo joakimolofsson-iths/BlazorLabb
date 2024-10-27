@@ -20,12 +20,15 @@ else
             <li>@user.Id | @user.Name | @user.Email | @user.UserAddress.Street | @user.UserAddress.City | @user.UserAddress.ZipCode | @user.UserCompany.Name | @user.UserCompany.Catchphrase</li>
         }
     </ul>
+
+    <p>@_jsonData</p>
 }
 
 @code {
     private bool _loadingUsers = true;
     private bool _showAll = false;
-    private List<User> _localUsers = new List<User>();
+    private List<User> _locallyGeneratedUsers = new List<User>();
+    private string _jsonData;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -34,7 +37,27 @@ else
             await Task.Delay(1000);
             _loadingUsers = false;
             GenerateLocalUsers();
+            await FetchJsonDataAsync();
             StateHasChanged();
+        }
+    }
+
+    private async Task FetchJsonDataAsync()
+    {
+        using var client = new HttpClient();
+
+        try
+        {
+            var result = await client.GetStringAsync("https://jsonplaceholder.typicode.com/users");
+            _jsonData = result;
+        }
+        catch (HttpRequestException e)
+        {
+            _jsonData = "Http Request Error...";
+        }
+        catch (Exception e)
+        {
+            _jsonData = "Something went wrong...";
         }
     }
 
@@ -58,7 +81,7 @@ else
             generatedUsers.Add(new User(i + 1, names[i], emails[i], streets[i], cities[i], zipCodes[i], companyNames[i], companyCatchphrases[i]));
         }
 
-        _localUsers = generatedUsers;
+        _locallyGeneratedUsers = generatedUsers;
     }
 
     private List<User> GetUsers()
@@ -67,11 +90,11 @@ else
 
         if(!_showAll)
         {
-            sortUserByName = _localUsers.OrderBy(user => user.Name).Take(5).ToList();
+            sortUserByName = _locallyGeneratedUsers.OrderBy(user => user.Name).Take(5).ToList();
         }
         else
         {
-            sortUserByName = _localUsers.OrderBy(user => user.Name).ToList();
+            sortUserByName = _locallyGeneratedUsers.OrderBy(user => user.Name).ToList();
         }
 
         return sortUserByName;
