@@ -19,11 +19,13 @@ else
     <button @onclick="SortById">@(!_sortById ? "Sort by ID / Ascending " : "Sort by ID / Descending")</button>
     <button @onclick="SortByName">@(!_sortByName ? "Sort by Name / Ascending" : "Sort by Name / Descending")</button>
 
+    <input placeholder="Search" @oninput="HandleSearch"/>
+
     <br/>
     <br/>
 
     <ul>
-        @foreach(var user in GetUsers())
+        @foreach (var user in GetUsers(_searchInput))
         {
             <li>
                 <p style="width: 50px">@user.Id</p>
@@ -49,6 +51,7 @@ else
     private List<User> _jsonGeneratedUsers = new List<User>();
     private List<User> _allGeneratedUsers = new List<User>();
     private string _errorMsg;
+    private string _searchInput = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -117,8 +120,29 @@ else
         _allGeneratedUsers.AddRange(_jsonGeneratedUsers);
     }
 
-    private List<User> GetUsers()
+    //To-do: Denna metod behövs förbättras, men den funkar...
+    private List<User> GetUsers(string searchInput)
     {
+        //To-do: Något konstigt med if'n...  
+        if (string.IsNullOrWhiteSpace(searchInput) && (_allGeneratedUsers?.Any() == false))
+        {
+            _errorMsg = "Hejsan";
+            CombineUsers();
+            StateHasChanged();
+        }
+        else
+        {
+            //To-do: Gör någon typ av loop här för att städa upp koden...
+            _allGeneratedUsers = _allGeneratedUsers.Where(search => search.Name.ToLower().StartsWith(searchInput.ToLower()) ||
+                search.Email.ToLower().StartsWith(searchInput.ToLower()) ||
+                search.Address.Street.ToLower().StartsWith(searchInput.ToLower()) ||
+                search.Address.City.ToLower().StartsWith(searchInput.ToLower()) ||
+                search.Address.ZipCode.ToLower().StartsWith(searchInput.ToLower()) ||
+                search.Company.Name.ToLower().StartsWith(searchInput.ToLower()) ||
+                search.Company.Catchphrase.ToLower().StartsWith(searchInput.ToLower())
+            ).ToList();
+        }
+
         var sortedUsers = new List<User>();
         int? showAllUser = _showAll ? null : 5;
 
@@ -165,5 +189,10 @@ else
         _sortByName = !_sortByName;
         _lastButtonPressed = "sortByName";
         StateHasChanged();
+    }
+
+    private void HandleSearch(ChangeEventArgs e)
+    {
+        _searchInput = e.Value?.ToString() ?? string.Empty;
     }
 }
