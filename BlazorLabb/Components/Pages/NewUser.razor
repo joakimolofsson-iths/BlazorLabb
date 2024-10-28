@@ -18,15 +18,15 @@
             <br />
             <InputText placeholder="E-mail" @bind-Value="_newUser.Email" />
             <br />
-            <InputText placeholder="Street" @bind-Value="_newUser.UserAddress.Street" />
+            <InputText placeholder="Street" @bind-Value="_newUser.Address.Street" />
             <br />
-            <InputText placeholder="City" @bind-Value="_newUser.UserAddress.City" />
+            <InputText placeholder="City" @bind-Value="_newUser.Address.City" />
             <br />
-            <InputText placeholder="ZIP Code" @bind-Value="_newUser.UserAddress.ZipCode" />
+            <InputText placeholder="ZIP Code" @bind-Value="_newUser.Address.ZipCode" />
             <br />
-            <InputText placeholder="Company Name" @bind-Value="_newUser.UserCompany.Name" />
+            <InputText placeholder="Company Name" @bind-Value="_newUser.Company.Name" />
             <br />
-            <InputText placeholder="Company Catchpharse" @bind-Value="_newUser.UserCompany.Catchphrase" />
+            <InputText placeholder="Company Catchpharse" @bind-Value="_newUser.Company.Catchphrase" />
         </div>
 
         <button type="submit">Save New User</button>
@@ -36,11 +36,11 @@
         <p style="color: green">You have saved the following user:</p>
         <p>Name: @_newUser.Name</p>
         <p>E-Mail: @_newUser.Email</p>
-        <p>Street: @_newUser.UserAddress.Street</p>
-        <p>City: @_newUser.UserAddress.City</p>
-        <p>ZIP Code: @_newUser.UserAddress.ZipCode</p>
-        <p>Company Name: @_newUser.UserCompany.Name</p>
-        <p>Company Catchpharse: @_newUser.UserCompany.Catchphrase</p>
+        <p>Street: @_newUser.Address.Street</p>
+        <p>City: @_newUser.Address.City</p>
+        <p>ZIP Code: @_newUser.Address.ZipCode</p>
+        <p>Company Name: @_newUser.Company.Name</p>
+        <p>Company Catchpharse: @_newUser.Company.Catchphrase</p>
     }    
 
 </EditForm>

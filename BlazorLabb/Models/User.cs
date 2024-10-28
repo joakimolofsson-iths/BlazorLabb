@@ -6,13 +6,13 @@
         public string Name { get; set; }
         public string Email { get; set; }
 
-        public Address UserAddress { get; set; } = new Address();
-        public Company UserCompany { get; set; } = new Company();
+        public Address Address { get; set; } = new Address();
+        public Company Company { get; set; } = new Company();
 
         public User()
         {
-            UserAddress = new Address();
-            UserCompany = new Company();
+            Address = new Address();
+            Company = new Company();
         }
 
         public User(int id, string name, string email, string street, string city, string zipCode, string companyName, string companyCatchphrase) 
@@ -20,13 +20,13 @@
             Id = id;
             Name = name;
             Email = email;
-            UserAddress = new Address
+            Address = new Address
             {
                 Street = street,
                 City = city,
                 ZipCode = zipCode
             };
-            UserCompany = new Company
+            Company = new Company
             {
                 Name = companyName,
                 Catchphrase = companyCatchphrase

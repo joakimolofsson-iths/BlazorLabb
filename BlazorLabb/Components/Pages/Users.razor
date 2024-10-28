@@ -1,5 +1,6 @@
 ﻿@page "/users"
 @rendermode InteractiveServer
+@using System.Text.Json;
 @using BlazorLabb.Models
 
 <PageTitle>Users</PageTitle>
@@ -12,23 +13,42 @@
 }
 else
 {
+    <p>@_errorMsg</p>
+
     <button @onclick="ShowAllUsers">@(!_showAll ? "Show All Users" : "Show First Five Users")</button>
+    <button @onclick="SortById">@(!_sortById ? "Sort by ID / Ascending " : "Sort by ID / Descending")</button>
+    <button @onclick="SortByName">@(!_sortByName ? "Sort by Name / Ascending" : "Sort by Name / Descending")</button>
+
+    <br/>
+    <br/>
 
     <ul>
         @foreach(var user in GetUsers())
         {
-            <li>@user.Id | @user.Name | @user.Email | @user.UserAddress.Street | @user.UserAddress.City | @user.UserAddress.ZipCode | @user.UserCompany.Name | @user.UserCompany.Catchphrase</li>
+            <li>
+                <p style="width: 50px">@user.Id</p>
+                <p>@user.Name</p>
+                <p style="width: 300px">@user.Email</p>
+                <p>@user.Address.Street</p>
+                <p>@user.Address.City</p>
+                <p>@user.Address.ZipCode</p>
+                <p>@user.Company.Name</p>
+                <p style="width: 300px">@user.Company.Catchphrase</p>
+            </li>
         }
     </ul>
-
-    <p>@_jsonData</p>
 }
 
 @code {
     private bool _loadingUsers = true;
     private bool _showAll = false;
+    private bool _sortById = false;
+    private bool _sortByName = false;
+    private string _lastButtonPressed;
     private List<User> _locallyGeneratedUsers = new List<User>();
-    private string _jsonData;
+    private List<User> _jsonGeneratedUsers = new List<User>();
+    private List<User> _allGeneratedUsers = new List<User>();
+    private string _errorMsg;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -36,32 +56,38 @@ else
         {
             await Task.Delay(1000);
             _loadingUsers = false;
-            GenerateLocalUsers();
             await FetchJsonDataAsync();
+            GenerateLocalUsers();
+            CombineUsers();
             StateHasChanged();
         }
     }
 
     private async Task FetchJsonDataAsync()
     {
-        using var client = new HttpClient();
+        using var httpClient = new HttpClient();
 
         try
         {
-            var result = await client.GetStringAsync("https://jsonplaceholder.typicode.com/users");
-            _jsonData = result;
+            var respone = await httpClient.GetStringAsync("https://jsonplaceholder.typicode.com/users");
+            var users = JsonSerializer.Deserialize<List<User>>(respone, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true // Optional: ignore case when mapping properties
+            });
+
+            _jsonGeneratedUsers = users;
         }
         catch (HttpRequestException e)
         {
-            _jsonData = "Http Request Error...";
+            _errorMsg = "Http Request Error...";
         }
         catch (Exception e)
         {
-            _jsonData = "Something went wrong...";
+            _errorMsg = "Something went wrong...";
         }
     }
 
-    //To do: Skapa en separat class med alla metoder som har med skapande av users...
+    //To-do: Skapa en separat class med alla metoder som har med skapande av users...
     private void GenerateLocalUsers()
     {
         string[] names = { "Emma Hayes", "Liam Carter", "Ava Brooks", "Noah Hughes", "Mia Bennett", "Ethan Price", "Sophia Rogers", "Oliver Reed", "Isabella Morgan", "Lucas Green" };
@@ -72,37 +98,72 @@ else
         string[] companyNames = { "Greenfield Corp.", "Skyline Ventures", "Sunrise Innovations", "Peak Solutions", "Global Synergy", "BrightPath LLC", "NextGen Labs", "Blue Horizon Inc.", "Edge Dynamics", "VividTech" };
         string[] companyCatchphrases = { "Innovate Your Future", "Bringing Ideas to Life", "Where Vision Meets Reality", "Beyond the Horizon", "Empowering Possibilities", "Inspiring Growth", "Redefining Excellence", "The Future, Today", "Shaping Tomorrow", "Excellence Through Innovation" };
 
-        var generatedUsers = new List<User>();
-        //var random = new Random();
+        var users = new List<User>();
+        var random = new Random();
+        int randomNumber = random.Next(0, 10);
 
         for (int i = 0; i < 10; i++)
         {
-            //int randomNumber = random.Next(0, 10);
-            generatedUsers.Add(new User(i + 1, names[i], emails[i], streets[i], cities[i], zipCodes[i], companyNames[i], companyCatchphrases[i]));
+
+            users.Add(new User(i + 11, names[i], emails[i], streets[i], cities[i], zipCodes[i], companyNames[i], companyCatchphrases[i]));
         }
 
-        _locallyGeneratedUsers = generatedUsers;
+        _locallyGeneratedUsers = users;
+    }
+
+    private void CombineUsers()
+    {
+        _allGeneratedUsers.AddRange(_locallyGeneratedUsers);
+        _allGeneratedUsers.AddRange(_jsonGeneratedUsers);
     }
 
     private List<User> GetUsers()
     {
-        var sortUserByName = new List<User>();
+        var sortedUsers = new List<User>();
+        int? showAllUser = _showAll ? null : 5;
 
-        if(!_showAll)
+        //To-do: Jag tror att det kan vara snyggare med <option> ascending - descending här istället för knappar...
+        if(_sortById && _lastButtonPressed == "sortById")
         {
-            sortUserByName = _locallyGeneratedUsers.OrderBy(user => user.Name).Take(5).ToList();
+            sortedUsers = _allGeneratedUsers.OrderBy(user => user.Id).Take(showAllUser ?? int.MaxValue).ToList();
+        }
+        else if (!_sortById && _lastButtonPressed == "sortById")
+        {
+            sortedUsers = _allGeneratedUsers.OrderByDescending(user => user.Id).Take(showAllUser ?? int.MaxValue).ToList();
+        }
+        else if (_sortByName && _lastButtonPressed == "sortByName")
+        {
+            sortedUsers = _allGeneratedUsers.OrderBy(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
+        }
+        else if (!_sortByName && _lastButtonPressed == "sortByName")
+        {
+            sortedUsers = _allGeneratedUsers.OrderByDescending(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
         }
         else
         {
-            sortUserByName = _locallyGeneratedUsers.OrderBy(user => user.Name).ToList();
+            sortedUsers = _allGeneratedUsers.OrderBy(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
         }
 
-        return sortUserByName;
+        return sortedUsers;
     }
 
     private void ShowAllUsers()
     {
         _showAll = !_showAll;
+        StateHasChanged();
+    }
+
+    private void SortById()
+    {
+        _sortById = !_sortById;
+        _lastButtonPressed = "sortById";
+        StateHasChanged();
+    }
+
+    private void SortByName()
+    {
+        _sortByName = !_sortByName;
+        _lastButtonPressed = "sortByName";
         StateHasChanged();
     }
 }
