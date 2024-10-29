@@ -25,7 +25,7 @@ else
     <br/>
 
     <ul>
-        @foreach (var user in GetUsers(_searchInput))
+        @foreach (var user in GetUsers())
         {
             <li>
                 <p style="width: 50px">@user.Id</p>
@@ -121,74 +121,65 @@ else
     }
 
     //To-do: Denna metod behövs förbättras, men den funkar...
-    private List<User> GetUsers(string searchInput)
+    private List<User> GetUsers()
     {
-        //To-do: Något konstigt med if'n...  
-        if (string.IsNullOrWhiteSpace(searchInput) && (_allGeneratedUsers?.Any() == false))
+        List<User> sortedUsers;
+        int? showAllUser = _showAll ? null : 5;
+
+        if(string.IsNullOrWhiteSpace(_searchInput))
         {
-            _errorMsg = "Hejsan";
-            CombineUsers();
-            StateHasChanged();
+            sortedUsers = _allGeneratedUsers;
         }
         else
         {
-            //To-do: Gör någon typ av loop här för att städa upp koden...
-            _allGeneratedUsers = _allGeneratedUsers.Where(search => search.Name.ToLower().StartsWith(searchInput.ToLower()) ||
-                search.Email.ToLower().StartsWith(searchInput.ToLower()) ||
-                search.Address.Street.ToLower().StartsWith(searchInput.ToLower()) ||
-                search.Address.City.ToLower().StartsWith(searchInput.ToLower()) ||
-                search.Address.ZipCode.ToLower().StartsWith(searchInput.ToLower()) ||
-                search.Company.Name.ToLower().StartsWith(searchInput.ToLower()) ||
-                search.Company.Catchphrase.ToLower().StartsWith(searchInput.ToLower())
-            ).ToList();
+            sortedUsers = _allGeneratedUsers.Where(search => search.Name.ToLower().StartsWith(_searchInput.ToLower()) ||
+                 search.Email.ToLower().StartsWith(_searchInput.ToLower()) ||
+                 search.Address.Street.ToLower().StartsWith(_searchInput.ToLower()) ||
+                 search.Address.City.ToLower().StartsWith(_searchInput.ToLower()) ||
+                 search.Address.ZipCode.ToLower().StartsWith(_searchInput.ToLower()) ||
+                 search.Company.Name.ToLower().StartsWith(_searchInput.ToLower()) ||
+                 search.Company.Catchphrase.ToLower().StartsWith(_searchInput.ToLower()))
+                 .ToList();
         }
 
-        var sortedUsers = new List<User>();
-        int? showAllUser = _showAll ? null : 5;
-
         //To-do: Jag tror att det kan vara snyggare med <option> ascending - descending här istället för knappar...
-        if(_sortById && _lastButtonPressed == "sortById")
+        if (_sortById && _lastButtonPressed == "sortById")
         {
-            sortedUsers = _allGeneratedUsers.OrderBy(user => user.Id).Take(showAllUser ?? int.MaxValue).ToList();
+            return sortedUsers.OrderBy(user => user.Id).Take(showAllUser ?? int.MaxValue).ToList();
         }
         else if (!_sortById && _lastButtonPressed == "sortById")
         {
-            sortedUsers = _allGeneratedUsers.OrderByDescending(user => user.Id).Take(showAllUser ?? int.MaxValue).ToList();
+            return sortedUsers.OrderByDescending(user => user.Id).Take(showAllUser ?? int.MaxValue).ToList();
         }
         else if (_sortByName && _lastButtonPressed == "sortByName")
         {
-            sortedUsers = _allGeneratedUsers.OrderBy(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
+            return sortedUsers.OrderBy(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
         }
         else if (!_sortByName && _lastButtonPressed == "sortByName")
         {
-            sortedUsers = _allGeneratedUsers.OrderByDescending(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
+            return sortedUsers.OrderByDescending(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
         }
         else
         {
-            sortedUsers = _allGeneratedUsers.OrderBy(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
+            return sortedUsers.OrderBy(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
         }
-
-        return sortedUsers;
     }
 
     private void ShowAllUsers()
     {
         _showAll = !_showAll;
-        StateHasChanged();
     }
 
     private void SortById()
     {
         _sortById = !_sortById;
         _lastButtonPressed = "sortById";
-        StateHasChanged();
     }
 
     private void SortByName()
     {
         _sortByName = !_sortByName;
         _lastButtonPressed = "sortByName";
-        StateHasChanged();
     }
 
     private void HandleSearch(ChangeEventArgs e)
