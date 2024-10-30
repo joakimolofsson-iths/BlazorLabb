@@ -14,19 +14,19 @@
     {
         <p>Add a new user:</p>
         <div>
-            <InputText placeholder="Name" @bind-Value="_newUser.Name" />
-            <br />
-            <InputText placeholder="E-mail" @bind-Value="_newUser.Email" />
-            <br />
-            <InputText placeholder="Street" @bind-Value="_newUser.Address.Street" />
-            <br />
-            <InputText placeholder="City" @bind-Value="_newUser.Address.City" />
-            <br />
-            <InputText placeholder="ZIP Code" @bind-Value="_newUser.Address.ZipCode" />
-            <br />
-            <InputText placeholder="Company Name" @bind-Value="_newUser.Company.Name" />
-            <br />
-            <InputText placeholder="Company Catchpharse" @bind-Value="_newUser.Company.Catchphrase" />
+            <InputText class="newUserInput" placeholder="Name" @bind-Value="_newUser.Name" />
+
+            <InputText class="newUserInput" placeholder="E-mail" @bind-Value="_newUser.Email" />
+
+            <InputText class="newUserInput" placeholder="Street" @bind-Value="_newUser.Address.Street" />
+
+            <InputText class="newUserInput" placeholder="City" @bind-Value="_newUser.Address.City" />
+
+            <InputText class="newUserInput" placeholder="ZIP Code" @bind-Value="_newUser.Address.ZipCode" />
+
+            <InputText class="newUserInput" placeholder="Company Name" @bind-Value="_newUser.Company.Name" />
+
+            <InputText class="newUserInput" placeholder="Company Catchpharse" @bind-Value="_newUser.Company.Catchphrase" />
         </div>
 
         <button type="submit">Save New User</button>
