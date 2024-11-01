@@ -1,0 +1,40 @@
+﻿@using BlazorLabb.Models;
+
+<EditForm Model="UserModel" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>Add a new user:</p>
+
+    <div>
+        <InputText class="newUserInput" placeholder="Name" @bind-Value="UserModel.Name" />
+
+        <InputText class="newUserInput" placeholder="E-mail" @bind-Value="UserModel.Email" />
+
+        <InputText class="newUserInput" placeholder="Street" @bind-Value="UserModel.Address.Street" />
+
+        <InputText class="newUserInput" placeholder="City" @bind-Value="UserModel.Address.City" />
+
+        <InputText class="newUserInput" placeholder="ZIP Code" @bind-Value="UserModel.Address.ZipCode" />
+
+        <InputText class="newUserInput" placeholder="Company Name" @bind-Value="UserModel.Company.Name" />
+
+        <InputText class="newUserInput" placeholder="Company Catchpharse" @bind-Value="UserModel.Company.Catchphrase" />
+    </div>
+
+    <button type="submit">Save New User</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public User UserModel { get; set; }
+
+    [Parameter]
+    public EventCallback NewUserSaved { get; set; }
+
+    private void HandleSubmit()
+    {
+        NewUserSaved.InvokeAsync();
+    }
+}

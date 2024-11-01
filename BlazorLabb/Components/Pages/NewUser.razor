@@ -1,49 +1,27 @@
 ﻿@page "/newuser"
 @rendermode InteractiveServer
 @using BlazorLabb.Models
+@using BlazorLabb.Components.Pages.Components
 
 <PageTitle>New User</PageTitle>
 
 <h1>New User</h1>
 
-<EditForm Model="_newUser" OnValidSubmit="HandleSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    @if (!_newUserSaved)
-    {
-        <p>Add a new user:</p>
-        <div>
-            <InputText class="newUserInput" placeholder="Name" @bind-Value="_newUser.Name" />
-
-            <InputText class="newUserInput" placeholder="E-mail" @bind-Value="_newUser.Email" />
-
-            <InputText class="newUserInput" placeholder="Street" @bind-Value="_newUser.Address.Street" />
-
-            <InputText class="newUserInput" placeholder="City" @bind-Value="_newUser.Address.City" />
-
-            <InputText class="newUserInput" placeholder="ZIP Code" @bind-Value="_newUser.Address.ZipCode" />
-
-            <InputText class="newUserInput" placeholder="Company Name" @bind-Value="_newUser.Company.Name" />
-
-            <InputText class="newUserInput" placeholder="Company Catchpharse" @bind-Value="_newUser.Company.Catchphrase" />
-        </div>
-
-        <button type="submit">Save New User</button>
-    }
-    else
-    {
-        <p style="color: green">You have saved the following user:</p>
-        <p>Name: @_newUser.Name</p>
-        <p>E-Mail: @_newUser.Email</p>
-        <p>Street: @_newUser.Address.Street</p>
-        <p>City: @_newUser.Address.City</p>
-        <p>ZIP Code: @_newUser.Address.ZipCode</p>
-        <p>Company Name: @_newUser.Company.Name</p>
-        <p>Company Catchpharse: @_newUser.Company.Catchphrase</p>
-    }    
-
-</EditForm>
+@if (!_newUserSaved)
+{
+    <NewUserForm UserModel="_newUser" NewUserSaved="HandleSubmit" />
+}
+else
+{
+    <p style="color: green">You have saved the following user:</p>
+    <p>Name: @_newUser.Name</p>
+    <p>E-Mail: @_newUser.Email</p>
+    <p>Street: @_newUser.Address.Street</p>
+    <p>City: @_newUser.Address.City</p>
+    <p>ZIP Code: @_newUser.Address.ZipCode</p>
+    <p>Company Name: @_newUser.Company.Name</p>
+    <p>Company Catchpharse: @_newUser.Company.Catchphrase</p>
+}
 
 @code {
     private User _newUser = new User();
@@ -53,6 +31,4 @@
     {
         _newUserSaved = true;
     }
-
-    //To do: Lägg till en ny skapad user till dina local skapade users...
 }
