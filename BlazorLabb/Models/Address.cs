@@ -12,6 +12,6 @@ namespace BlazorLabb.Models
 
         [Required(ErrorMessage = "ZIP Code is required.")]
         [RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid ZIP Code format.")]
-        public string ZipCode { get; set; }
+        public string ZipCode { get; set; } //Leading zeros (e.g., "01234"), which would be lost if stored as an integer.
     }
 }

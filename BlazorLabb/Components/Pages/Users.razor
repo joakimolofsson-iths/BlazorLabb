@@ -38,9 +38,12 @@ else
             </li>
         }
     </ul>
+
+    <p>@_text</p>
 }
 
 @code {
+    private string ?_text;
     private bool _loadingUsers = true;
     private bool _showAll = false;
     private bool _sortById = false;
@@ -131,13 +134,17 @@ else
         }
         else
         {
-            sortedUsers = _allGeneratedUsers.Where(search => search.Name.ToLower().StartsWith(_searchInput.ToLower()) ||
-                 search.Email.ToLower().StartsWith(_searchInput.ToLower()) ||
-                 search.Address.Street.ToLower().StartsWith(_searchInput.ToLower()) ||
-                 search.Address.City.ToLower().StartsWith(_searchInput.ToLower()) ||
-                 search.Address.ZipCode.ToLower().StartsWith(_searchInput.ToLower()) ||
-                 search.Company.Name.ToLower().StartsWith(_searchInput.ToLower()) ||
-                 search.Company.Catchphrase.ToLower().StartsWith(_searchInput.ToLower()))
+            var _searchInputLower = _searchInput.ToLower();
+
+            //Refact: Ensure that the properties you are accessing(like Address and Company) are not null, as this will throw a NullReferenceException.If they can be null, you might want to add null checks to avoid exceptions.
+            //To-do: Lägg till Id kanske? Int converteras om till string av Where.
+            sortedUsers = _allGeneratedUsers.Where(search => search.Name.ToLower().StartsWith(_searchInputLower) ||
+                 search.Email.ToLower().StartsWith(_searchInputLower) ||
+                 search.Address.Street.ToLower().StartsWith(_searchInputLower) ||
+                 search.Address.City.ToLower().StartsWith(_searchInputLower) ||
+                 search.Address.ZipCode.ToLower().StartsWith(_searchInputLower) ||
+                 search.Company.Name.ToLower().StartsWith(_searchInputLower) ||
+                 search.Company.Catchphrase.ToLower().StartsWith(_searchInputLower))
                  .ToList();
         }
 
@@ -164,6 +171,7 @@ else
         }
     }
 
+    //Refrac: Kan du förbättra koden med Enum här...
     private void ShowAllUsers()
     {
         _showAll = !_showAll;
