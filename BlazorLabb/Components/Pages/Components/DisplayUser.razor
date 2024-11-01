@@ -1,14 +1,14 @@
 ﻿@using BlazorLabb.Models
 
-<li>
-	<p style="color: green">You have saved the following user:</p>
-	<p>Name: @UserModel.Name</p>
-	<p>E-Mail: @UserModel.Email</p>
-	<p>Street: @UserModel.Address.Street</p>
-	<p>City: @UserModel.Address.City</p>
-	<p>ZIP Code: @UserModel.Address.ZipCode</p>
-	<p>Company Name: @UserModel.Company.Name</p>
-	<p>Company Catchpharse: @UserModel.Company.Catchphrase</p>
+<li class="userDisplay">
+    <p style="width: 50px">@UserModel.Id</p>
+    <p>@UserModel.Name</p>
+    <p style="width: 300px">@UserModel.Email</p>
+    <p>@UserModel.Address.Street</p>
+    <p>@UserModel.Address.City</p>
+    <p>@UserModel.Address.ZipCode</p>
+    <p>@UserModel.Company.Name</p>
+    <p style="width: 300px">@UserModel.Company.Catchphrase</p>
 </li>
 
 @code {

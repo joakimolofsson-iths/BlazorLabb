@@ -1,6 +1,7 @@
 ﻿@page "/users"
 @rendermode InteractiveServer
 @using BlazorLabb.Models
+@using BlazorLabb.Components.Pages.Components
 
 <PageTitle>Users</PageTitle>
 
@@ -26,16 +27,7 @@ else
     <ul>
         @foreach (var user in GetUsers())
         {
-            <li>
-                <p style="width: 50px">@user.Id</p>
-                <p>@user.Name</p>
-                <p style="width: 300px">@user.Email</p>
-                <p>@user.Address.Street</p>
-                <p>@user.Address.City</p>
-                <p>@user.Address.ZipCode</p>
-                <p>@user.Company.Name</p>
-                <p style="width: 300px">@user.Company.Catchphrase</p>
-            </li>
+            <DisplayUser UserModel="user"/>
         }
     </ul>
 

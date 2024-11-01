@@ -6,15 +6,3 @@ input {
     margin-left: 10px;
     width: 300px;
 }
-
-li {
-    border-bottom: 1px solid lightgrey;
-}
-
-li p {
-    display: inline-block;
-    margin: 0;
-    padding: 0;
-    width: 200px;
-    /*background: lightgrey;*/
-}
