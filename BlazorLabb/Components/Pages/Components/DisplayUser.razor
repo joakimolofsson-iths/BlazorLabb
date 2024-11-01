@@ -1,0 +1,17 @@
+﻿@using BlazorLabb.Models
+
+<li>
+	<p style="color: green">You have saved the following user:</p>
+	<p>Name: @UserModel.Name</p>
+	<p>E-Mail: @UserModel.Email</p>
+	<p>Street: @UserModel.Address.Street</p>
+	<p>City: @UserModel.Address.City</p>
+	<p>ZIP Code: @UserModel.Address.ZipCode</p>
+	<p>Company Name: @UserModel.Company.Name</p>
+	<p>Company Catchpharse: @UserModel.Company.Catchphrase</p>
+</li>
+
+@code {
+	[Parameter]
+	public User UserModel { get; set; }
+}

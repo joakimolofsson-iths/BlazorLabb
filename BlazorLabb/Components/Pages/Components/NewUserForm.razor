@@ -8,17 +8,11 @@
 
     <div>
         <InputText class="newUserInput" placeholder="Name" @bind-Value="UserModel.Name" />
-
         <InputText class="newUserInput" placeholder="E-mail" @bind-Value="UserModel.Email" />
-
         <InputText class="newUserInput" placeholder="Street" @bind-Value="UserModel.Address.Street" />
-
         <InputText class="newUserInput" placeholder="City" @bind-Value="UserModel.Address.City" />
-
         <InputText class="newUserInput" placeholder="ZIP Code" @bind-Value="UserModel.Address.ZipCode" />
-
         <InputText class="newUserInput" placeholder="Company Name" @bind-Value="UserModel.Company.Name" />
-
         <InputText class="newUserInput" placeholder="Company Catchpharse" @bind-Value="UserModel.Company.Catchphrase" />
     </div>
 
@@ -33,8 +27,8 @@
     [Parameter]
     public EventCallback NewUserSaved { get; set; }
 
-    private void HandleSubmit()
+    private async Task HandleSubmit()
     {
-        NewUserSaved.InvokeAsync();
+        await NewUserSaved.InvokeAsync();
     }
 }

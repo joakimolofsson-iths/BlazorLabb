@@ -13,14 +13,7 @@
 }
 else
 {
-    <p style="color: green">You have saved the following user:</p>
-    <p>Name: @_newUser.Name</p>
-    <p>E-Mail: @_newUser.Email</p>
-    <p>Street: @_newUser.Address.Street</p>
-    <p>City: @_newUser.Address.City</p>
-    <p>ZIP Code: @_newUser.Address.ZipCode</p>
-    <p>Company Name: @_newUser.Company.Name</p>
-    <p>Company Catchpharse: @_newUser.Company.Catchphrase</p>
+    <DisplayUser UserModel="_newUser"/>
 }
 
 @code {
