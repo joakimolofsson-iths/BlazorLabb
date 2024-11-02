@@ -50,6 +50,47 @@ h1:focus {
     border-color: #929292;
 }
 
+
+
+
+
+/* My styling */
+
+.myPage {
+    position: relative;
+    display: block;
+}
+
+.myPage .myTitle {
+    font-size: 120px;
+    font-weight: bold;
+    margin: 0 0 0 30px;
+}
+
+.myPage .mySidebar {
+    width: 100%;
+    padding-left: 35px;
+    margin-top: -10px;
+}
+
+.myPage .mySidebar .myNav-link {
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.myPage .mySidebar .active {
+    color: red;
+    text-decoration: line-through;
+}
+
+.myPage .mySidebar a:hover {
+    color: red;
+}
+
+
+
 .newUserInput {
     margin-bottom: 10px;
     display: block;

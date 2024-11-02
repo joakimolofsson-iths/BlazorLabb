@@ -1,10 +1,10 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@* <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">BlazorLabb</a>
     </div>
-</div>
+</div> *@
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+@* <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
@@ -26,4 +26,10 @@
             </NavLink>
         </div>
     </nav>
+</div> *@
+
+<div>
+    <NavLink class="myNav-link" href="" Match="NavLinkMatch.All">Home</NavLink>
+    <NavLink class="myNav-link" href="newuser">New User</NavLink>
+    <NavLink class="myNav-link" href="users">Users</NavLink>
 </div>
