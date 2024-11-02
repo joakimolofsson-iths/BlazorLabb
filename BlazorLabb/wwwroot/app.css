@@ -96,14 +96,21 @@ h1:focus {
     display: block;
 }
 
+.userDisplayContainer {
+    margin: 0;
+    padding: 0;
+}
+
 .userDisplay {
-    border-bottom: 1px solid lightgrey;
+    border: 1px solid lightgrey;
+    list-style: none;
+    margin-bottom: 10px;
 }
 
 .userDisplay p {
     display: inline-block;
     margin: 0;
     padding: 0;
-    width: 200px;
-    /*background: lightgrey;*/
+    width: 300px;
+    background: lightblue;
 }
