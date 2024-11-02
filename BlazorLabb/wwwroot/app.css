@@ -94,6 +94,36 @@ h1:focus {
 .newUserInput {
     margin-bottom: 10px;
     display: block;
+    border: none;
+    border-bottom: 1px solid black;
+}
+.newUserInput:focus {
+    outline: none;
+}
+
+.newUserInputButton {
+    background: lightgrey;
+    border: none;
+    border-radius: 5px;
+}
+
+.sortSearchContainer > button {
+    background: lightgrey;
+    border: none;
+    border-radius: 5px;
+}
+
+.sortSearchContainer > span {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.sortSearchContainer > input {
+    border: none;
+    border-bottom: 1px solid black;
+}
+.sortSearchContainer > input:focus {
+    outline: none;
 }
 
 .userDisplayContainer {
@@ -102,16 +132,28 @@ h1:focus {
 }
 
 .userDisplayContainer > li {
+    position: relative;
     display: flex;
     margin-bottom: 10px;
     list-style: none;
-    border: 1px solid lightgrey;
+    border: 1px solid grey;
 }
 
 .userDisplayContainer > li > p {
-    margin: 0 0 0 10px;
+    margin: 5px 10px 5px 0;
+    padding: 0 0 0 10px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid grey;
+}
+
+.userDisplayContainer > li > p:nth-child(1) {
+    color: red;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
     padding: 0;
-    width: 100px;
-    background: lightblue;
-    word-wrap: break-word;
+    margin: 0;
+    border: none;
 }

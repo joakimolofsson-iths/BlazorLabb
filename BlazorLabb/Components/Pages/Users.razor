@@ -15,13 +15,14 @@ else
 {
     <p>@_errorMsg</p>
 
-    <button @onclick="ShowAllUsers">@(!_showAll ? "Show All Users" : "Show First Five Users")</button>
-    <button @onclick="SortById">@(!_sortById ? "Sort by ID / Ascending " : "Sort by ID / Descending")</button>
-    <button @onclick="SortByName">@(!_sortByName ? "Sort by Name / Ascending" : "Sort by Name / Descending")</button>
+    <div class="sortSearchContainer">
+        <button @onclick="ShowAllUsers">Show All</button>
+        <span>sort by:</span>
+        <button @onclick="SortById">Id</button>
+        <button @onclick="SortByName">Name</button>
+        <input placeholder="Search..." @oninput="HandleSearch" />
+    </div>
 
-    <input placeholder="Search" @oninput="HandleSearch"/>
-
-    <br/>
     <br/>
 
     <ul class="userDisplayContainer">
