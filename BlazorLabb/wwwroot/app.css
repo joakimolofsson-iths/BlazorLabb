@@ -101,16 +101,17 @@ h1:focus {
     padding: 0;
 }
 
-.userDisplay {
-    border: 1px solid lightgrey;
-    list-style: none;
+.userDisplayContainer > li {
+    display: flex;
     margin-bottom: 10px;
+    list-style: none;
+    border: 1px solid lightgrey;
 }
 
-.userDisplay p {
-    display: inline-block;
-    margin: 0;
+.userDisplayContainer > li > p {
+    margin: 0 0 0 10px;
     padding: 0;
-    width: 300px;
+    width: 100px;
     background: lightblue;
+    word-wrap: break-word;
 }
