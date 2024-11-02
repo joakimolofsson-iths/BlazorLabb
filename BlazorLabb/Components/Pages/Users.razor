@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @using BlazorLabb.Models
 @using BlazorLabb.Components.Pages.Components
+@implements BlazorLabb.Interfaces.IUsers
 
 <PageTitle>Users</PageTitle>
 
@@ -9,7 +10,7 @@
 
 @if (_loadingUsers)
 {
-    <p>Loading users...</p>
+    <h5>Loading users...</h5>
 }
 else
 {
@@ -31,12 +32,9 @@ else
             <DisplayUser UserModel="user"/>
         }
     </ul>
-
-    <p>@_text</p>
 }
 
 @code {
-    private string ?_text;
     private bool _loadingUsers = true;
     private bool _showAll = false;
     private bool _sortById = false;
@@ -59,6 +57,11 @@ else
             CombineUsers();
             StateHasChanged();
         }
+    }
+
+    public void Bacon()
+    {
+        
     }
 
     private async Task FetchJsonDataAsync()
@@ -116,7 +119,7 @@ else
     }
 
     //To-do: Denna metod behövs förbättras, men den funkar...
-    private List<User> GetUsers()
+    public List<User> GetUsers()
     {
         List<User> sortedUsers;
         int? showAllUser = _showAll ? null : 5;
