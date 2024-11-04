@@ -19,9 +19,9 @@ else
     <div class="sortSearchContainer">
         <button @onclick="HandleShowAll">Show All</button>
         <span>sort by:</span>
-        <button @onclick="SortById">Id</button>
-        <button @onclick="SortByName">Name</button>
-        <button @onclick="SortByEmail">E-Mail</button>
+        <button @onclick='() => HandleSortBy("Id")'>Id</button>
+        <button @onclick='() => HandleSortBy("Name")'>Name</button>
+        <button @onclick='() => HandleSortBy("Email")'>E-Mail</button>
         <input placeholder="Search..." @oninput="HandleSearch" />
     </div>
 
@@ -36,6 +36,12 @@ else
 }
 
 @code {
+    private Dictionary<string, bool> _sortByOptions = new()
+    {
+        { "Id", false },
+        { "Name", false },
+        { "Email", false }
+    };
     private bool _loadingUsers = true;
     private bool _showAll = false;
     private bool _sortById = false;
@@ -116,12 +122,12 @@ else
 
     public List<User> GetUsers()
     {
-        List<User> sortedUsers;
+        List<User> users;
 
-        sortedUsers = sortBySearch();
-        sortedUsers = sortBySelection(sortedUsers);
+        users = sortBySearch();
+        users = sortBySelection(users);
 
-        return sortedUsers;
+        return users;
     }
 
     private List<User> sortBySearch()
@@ -150,31 +156,62 @@ else
         return users;
     }
 
+    //Jag vill ha någon loop här... eller en generic method kanske... jag vill bara ha en orderBy och en orderByDesc, dessa ska ta input
     private List<User> sortBySelection(List<User> users)
     {
         int showLimitedUsers = 5;
         int? showAllUsers = _showAll ? null : showLimitedUsers;
 
-        if (_sortById && _lastButtonPressed == "sortById")
-        {
-            return users.OrderBy(user => user.Id).Take(showAllUsers ?? int.MaxValue).ToList();
-        }
-        else if (!_sortById && _lastButtonPressed == "sortById")
-        {
-            return users.OrderByDescending(user => user.Id).Take(showAllUsers ?? int.MaxValue).ToList();
-        }
-        else if (_sortByName && _lastButtonPressed == "sortByName")
-        {
-            return users.OrderBy(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
-        }
-        else if (!_sortByName && _lastButtonPressed == "sortByName")
-        {
-            return users.OrderByDescending(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
-        }
-        else
-        {
-            return users.OrderBy(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
-        }
+        // Dictionary<string, Func<User, object>> fetchUserData = new()
+        // {
+        //     { "Id", user => user.Id}
+        // };
+
+        // if (_sortByOptions.ContainsKey(_lastButtonPressed) && _sortByOptions[_lastButtonPressed] == true)
+        // {
+        //     return users.OrderBy(user => typeof(User).GetProperty(_lastButtonPressed)).Take(showAllUsers ?? int.MaxValue).ToList();
+        // }
+        // else if (_sortByOptions.ContainsKey(_lastButtonPressed) && _sortByOptions[_lastButtonPressed] == false)
+        // {
+        //     return users.OrderByDescending(user => typeof(User).GetProperty(_lastButtonPressed)).Take(showAllUsers ?? int.MaxValue).ToList();
+        // }
+
+        // return users;
+
+        // if (_sortById && _lastButtonPressed == "sortById")
+        // {
+        //     return users.OrderBy(user => user.Id).Take(showAllUsers ?? int.MaxValue).ToList();
+        // }
+        // else if (!_sortById && _lastButtonPressed == "sortById")
+        // {
+        //     return users.OrderByDescending(user => user.Id).Take(showAllUsers ?? int.MaxValue).ToList();
+        // }
+        // else if (_sortByName && _lastButtonPressed == "sortByName")
+        // {
+        //     return users.OrderBy(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
+        // }
+        // else if (!_sortByName && _lastButtonPressed == "sortByName")
+        // {
+        //     return users.OrderByDescending(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
+        // }
+        // else
+        // {
+        //     //default sortering av name efter "loading users..."
+        //     return users.orderby(user => user.name).Take(showallusers ?? int.maxvalue).tolist();
+        // }
+
+        // switch (_lastButtonPressed)
+        // {
+        //     case "Id":
+        //         // code block
+        //         break;
+        //     case "Name":
+        //         // code block
+        //         break;
+        //     default:
+        //         // code block
+        //         break;
+        // }
     }
 
     private void HandleShowAll()
@@ -182,8 +219,18 @@ else
         _showAll = !_showAll;
     }
 
-    private void HandleSortBy()
+    private void HandleSortBy(string option)
     {
+        if (_sortByOptions.ContainsKey(option))
+        {
+            _sortByOptions[option] = !_sortByOptions[option];
+            _lastButtonPressed = option;
+        }
+
+        // if (_sortByOptions[option] == true)
+        // {
+        //     _errorMsg = _sortByOptions[option].ToString();
+        // }
         
     }
 
@@ -192,21 +239,21 @@ else
         _searchInput = e.Value?.ToString() ?? string.Empty;
     }
 
-    private void SortById()
-    {
-        _sortById = !_sortById;
-        _lastButtonPressed = "sortById";
-    }
+    // private void SortById()
+    // {
+    //     _sortById = !_sortById;
+    //     _lastButtonPressed = "sortById";
+    // }
 
-    private void SortByName()
-    {
-        _sortByName = !_sortByName;
-        _lastButtonPressed = "sortByName";
-    }
+    // private void SortByName()
+    // {
+    //     _sortByName = !_sortByName;
+    //     _lastButtonPressed = "sortByName";
+    // }
 
-    private void SortByEmail()
-    {
-        _sortByName = !_sortByEmail;
-        _lastButtonPressed = "sortByEmail";
-    }
+    // private void SortByEmail()
+    // {
+    //     _sortByName = !_sortByEmail;
+    //     _lastButtonPressed = "sortByEmail";
+    // }
 }
