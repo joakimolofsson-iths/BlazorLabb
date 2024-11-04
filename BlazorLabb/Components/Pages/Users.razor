@@ -17,10 +17,11 @@ else
     <p>@_errorMsg</p>
 
     <div class="sortSearchContainer">
-        <button @onclick="ShowAllUsers">Show All</button>
+        <button @onclick="HandleShowAll">Show All</button>
         <span>sort by:</span>
         <button @onclick="SortById">Id</button>
         <button @onclick="SortByName">Name</button>
+        <button @onclick="SortByEmail">E-Mail</button>
         <input placeholder="Search..." @oninput="HandleSearch" />
     </div>
 
@@ -39,6 +40,7 @@ else
     private bool _showAll = false;
     private bool _sortById = false;
     private bool _sortByName = false;
+    private bool _sortByEmail = false;
     private string _lastButtonPressed;
     private List<User> _locallyGeneratedUsers = new List<User>();
     private List<User> _jsonGeneratedUsers = new List<User>();
@@ -59,11 +61,6 @@ else
         }
     }
 
-    public void Bacon()
-    {
-        
-    }
-
     private async Task FetchJsonDataAsync()
     {
         using var httpClient = new HttpClient();
@@ -73,7 +70,7 @@ else
             var respone = await httpClient.GetStringAsync("https://jsonplaceholder.typicode.com/users");
             var users = JsonSerializer.Deserialize<List<User>>(respone, new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true // Optional: ignore case when mapping properties
+                PropertyNameCaseInsensitive = true
             });
 
             _jsonGeneratedUsers = users;
@@ -88,7 +85,6 @@ else
         }
     }
 
-    //To-do: Skapa en separat class med alla metoder som har med skapande av users...
     private void GenerateLocalUsers()
     {
         string[] names = { "Emma Hayes", "Liam Carter", "Ava Brooks", "Noah Hughes", "Mia Bennett", "Ethan Price", "Sophia Rogers", "Oliver Reed", "Isabella Morgan", "Lucas Green" };
@@ -118,59 +114,82 @@ else
         _allGeneratedUsers.AddRange(_jsonGeneratedUsers);
     }
 
-    //To-do: Denna metod behövs förbättras, men den funkar...
     public List<User> GetUsers()
     {
         List<User> sortedUsers;
-        int? showAllUser = _showAll ? null : 5;
 
-        if(string.IsNullOrWhiteSpace(_searchInput))
+        sortedUsers = sortBySearch();
+        sortedUsers = sortBySelection(sortedUsers);
+
+        return sortedUsers;
+    }
+
+    private List<User> sortBySearch()
+    {
+        List<User> users = new();
+
+        if (string.IsNullOrWhiteSpace(_searchInput))
         {
-            sortedUsers = _allGeneratedUsers;
+            users = _allGeneratedUsers;
         }
         else
         {
             var _searchInputLower = _searchInput.ToLower();
 
-            //Refact: Ensure that the properties you are accessing(like Address and Company) are not null, as this will throw a NullReferenceException.If they can be null, you might want to add null checks to avoid exceptions.
-            //To-do: Lägg till Id kanske? Int converteras om till string av Where.
-            sortedUsers = _allGeneratedUsers.Where(search => search.Name.ToLower().StartsWith(_searchInputLower) ||
-                 search.Email.ToLower().StartsWith(_searchInputLower) ||
-                 search.Address.Street.ToLower().StartsWith(_searchInputLower) ||
-                 search.Address.City.ToLower().StartsWith(_searchInputLower) ||
-                 search.Address.ZipCode.ToLower().StartsWith(_searchInputLower) ||
-                 search.Company.Name.ToLower().StartsWith(_searchInputLower) ||
-                 search.Company.Catchphrase.ToLower().StartsWith(_searchInputLower))
-                 .ToList();
+            users = _allGeneratedUsers.Where(search => search.Id.ToString().StartsWith(_searchInputLower) ||
+                search.Name.ToLower().StartsWith(_searchInputLower) ||
+                search.Email.ToLower().StartsWith(_searchInputLower) ||
+                search.Address.Street.ToLower().StartsWith(_searchInputLower) ||
+                search.Address.City.ToLower().StartsWith(_searchInputLower) ||
+                search.Address.ZipCode.ToLower().StartsWith(_searchInputLower) ||
+                search.Company.Name.ToLower().StartsWith(_searchInputLower) ||
+                search.Company.Catchphrase.ToLower().StartsWith(_searchInputLower))
+                .ToList();
         }
 
-        //To-do: Jag tror att det kan vara snyggare med <option> ascending - descending här istället för knappar...
+        return users;
+    }
+
+    private List<User> sortBySelection(List<User> users)
+    {
+        int showLimitedUsers = 5;
+        int? showAllUsers = _showAll ? null : showLimitedUsers;
+
         if (_sortById && _lastButtonPressed == "sortById")
         {
-            return sortedUsers.OrderBy(user => user.Id).Take(showAllUser ?? int.MaxValue).ToList();
+            return users.OrderBy(user => user.Id).Take(showAllUsers ?? int.MaxValue).ToList();
         }
         else if (!_sortById && _lastButtonPressed == "sortById")
         {
-            return sortedUsers.OrderByDescending(user => user.Id).Take(showAllUser ?? int.MaxValue).ToList();
+            return users.OrderByDescending(user => user.Id).Take(showAllUsers ?? int.MaxValue).ToList();
         }
         else if (_sortByName && _lastButtonPressed == "sortByName")
         {
-            return sortedUsers.OrderBy(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
+            return users.OrderBy(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
         }
         else if (!_sortByName && _lastButtonPressed == "sortByName")
         {
-            return sortedUsers.OrderByDescending(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
+            return users.OrderByDescending(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
         }
         else
         {
-            return sortedUsers.OrderBy(user => user.Name).Take(showAllUser ?? int.MaxValue).ToList();
+            return users.OrderBy(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
         }
     }
 
-    //Refrac: Kan du förbättra koden med Enum här...
-    private void ShowAllUsers()
+    private void HandleShowAll()
     {
         _showAll = !_showAll;
+    }
+
+    private void HandleSortBy()
+    {
+        
+    }
+
+    private void HandleSearch(ChangeEventArgs e)
+    {
+        _searchInput = e.Value?.ToString() ?? string.Empty;
     }
 
     private void SortById()
@@ -185,8 +204,9 @@ else
         _lastButtonPressed = "sortByName";
     }
 
-    private void HandleSearch(ChangeEventArgs e)
+    private void SortByEmail()
     {
-        _searchInput = e.Value?.ToString() ?? string.Empty;
+        _sortByName = !_sortByEmail;
+        _lastButtonPressed = "sortByEmail";
     }
 }
