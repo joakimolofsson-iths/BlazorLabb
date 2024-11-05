@@ -1,4 +1,5 @@
 using BlazorLabb.Components;
+using BlazorLabb.Services;
 
 namespace BlazorLabb
 {
@@ -11,6 +12,9 @@ namespace BlazorLabb
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://jsonplaceholder.typicode.com/") });
+            builder.Services.AddScoped<GenerateUsers>();
 
             var app = builder.Build();
 
