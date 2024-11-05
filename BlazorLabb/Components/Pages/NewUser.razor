@@ -2,6 +2,8 @@
 @rendermode InteractiveServer
 @using BlazorLabb.Models
 @using BlazorLabb.Components.Pages.Components
+@using BlazorLabb.Services
+@inject GenerateUsers generateUsers
 
 <PageTitle>New User</PageTitle>
 
@@ -9,7 +11,7 @@
 
 @if (!_newUserSaved)
 {
-    <NewUserForm UserModel="_newUser" NewUserSaved="HandleSubmit" />
+    <NewUserForm UserModel="_newUser" NewUserSaved="HandleSubmit" CountUsers="generateUsers.Users.Count" />
 }
 else
 {
@@ -26,6 +28,7 @@ else
 
     private void HandleSubmit()
     {
+        generateUsers.AddNewUser(_newUser);
         _newUserSaved = true;
     }
 }

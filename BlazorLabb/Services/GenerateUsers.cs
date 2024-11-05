@@ -73,5 +73,10 @@ namespace BlazorLabb.Services
 
             return localUsers;
         }
+
+        public void AddNewUser(User user)
+        {
+            Users.Add(user);
+        }
     }
 }
