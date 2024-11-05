@@ -25,12 +25,8 @@
     [Parameter]
     public EventCallback NewUserSaved { get; set; }
 
-    [Parameter]
-    public int CountUsers { get; set; }
-
     private async Task HandleSubmit()
     {
-        UserModel.Id = CountUsers + 1;
         await NewUserSaved.InvokeAsync();
     }
 }

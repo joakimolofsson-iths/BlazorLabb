@@ -18,9 +18,10 @@ namespace BlazorLabb.Services
         public GenerateUsers(HttpClient httpClient) 
         {
             _httpClient = httpClient;
+            GenerateUsersAsync();
         }
 
-        public async Task GenerateUsersAsync()
+        private async Task GenerateUsersAsync()
         {
             List<User> jsonUsers = await FetchJsonUsersAsync();
             List<User> localUsers = GenerateLocalUsers(jsonUsers);
@@ -75,6 +76,7 @@ namespace BlazorLabb.Services
 
         public void AddNewUser(User user)
         {
+            user.Id = Users.Count + 1;
             Users.Add(user);
         }
     }

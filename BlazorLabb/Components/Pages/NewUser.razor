@@ -4,6 +4,7 @@
 @using BlazorLabb.Components.Pages.Components
 @using BlazorLabb.Services
 @inject GenerateUsers generateUsers
+@inject NavigationManager Navigation
 
 <PageTitle>New User</PageTitle>
 
@@ -11,7 +12,7 @@
 
 @if (!_newUserSaved)
 {
-    <NewUserForm UserModel="_newUser" NewUserSaved="HandleSubmit" CountUsers="generateUsers.Users.Count" />
+    <NewUserForm UserModel="_newUser" NewUserSaved="HandleSubmit" />
 }
 else
 {
@@ -22,15 +23,11 @@ else
     </ul>
 }
 
+
+
 @code {
     private User _newUser = new User();
     private bool _newUserSaved = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await generateUsers.GenerateUsersAsync();
-        StateHasChanged();
-    }
 
     private void HandleSubmit()
     {
