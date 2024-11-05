@@ -18,10 +18,9 @@ namespace BlazorLabb.Services
         public GenerateUsers(HttpClient httpClient) 
         {
             _httpClient = httpClient;
-            GenerateUsersAsync();
         }
 
-        private async Task GenerateUsersAsync()
+        public async Task GenerateUsersAsync()
         {
             List<User> jsonUsers = await FetchJsonUsersAsync();
             List<User> localUsers = GenerateLocalUsers(jsonUsers);

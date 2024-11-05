@@ -26,6 +26,12 @@ else
     private User _newUser = new User();
     private bool _newUserSaved = false;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await generateUsers.GenerateUsersAsync();
+        StateHasChanged();
+    }
+
     private void HandleSubmit()
     {
         generateUsers.AddNewUser(_newUser);
