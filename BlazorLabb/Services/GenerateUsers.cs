@@ -23,31 +23,38 @@ namespace BlazorLabb.Services
 
         private async Task GenerateUsersAsync()
         {
-            await FetchJsonUsersAsync();
-            GenerateLocalUsers();
+            List<User> jsonUsers = await FetchJsonUsersAsync();
+            List<User> localUsers = GenerateLocalUsers(jsonUsers);
+
+            Users.AddRange(jsonUsers);
+            Users.AddRange(localUsers);
         }
 
-        private async Task FetchJsonUsersAsync()
+        private async Task<List<User>> FetchJsonUsersAsync()
         {
             try
             {
-                var respone = await _httpClient.GetStringAsync("users");
-                var usersFromJson = JsonSerializer.Deserialize<List<User>>(respone, _options);
+                var respones = await _httpClient.GetStringAsync("users");
+                var usersFromJson = JsonSerializer.Deserialize<List<User>>(respones, _options);
 
-                Users = usersFromJson;
+                return usersFromJson;
             }
             catch (HttpRequestException e)
             {
                 ErrorMsg = "Http Request Error...";
+                return new List<User>();
             }
             catch (Exception e)
             {
                 ErrorMsg = "Something went wrong...";
+                return new List<User>();
             }
         }
 
-        private void GenerateLocalUsers()
+        private List<User> GenerateLocalUsers(List<User> jsonUsers)
         {
+            List<User> localUsers = new();
+
             string[] names = { "Emma Hayes", "Liam Carter", "Ava Brooks", "Noah Hughes", "Mia Bennett", "Ethan Price", "Sophia Rogers", "Oliver Reed", "Isabella Morgan", "Lucas Green" };
             string[] emails = { "bluefox87@mail.com", "sparklewave42@inbox.com", "sunnyclouds23@webmail.com", "silverstream55@netmail.com", "moonlitowl78@fastmail.com", "crimsonleaf91@mailbox.com", "goldenpetal34@postmail.com", "starfall16@freemail.com", "shimmeringsky45@quickmail.com", "wildriver82@openmail.com" };
             string[] streets = { "123 Maple St.", "456 Oak Ave.", "789 Pine Rd.", "101 Cedar Blvd.", "202 Birch Ln.", "303 Walnut St.", "404 Elm Dr.", "505 Chestnut Pl.", "606 Spruce Ct.", "707 Redwood Ter." };
@@ -61,8 +68,10 @@ namespace BlazorLabb.Services
 
             for (int i = 0; i < 10; i++)
             {
-                Users.Add(new User(Users.Count + (i + 1), names[i], emails[i], streets[i], cities[i], zipCodes[i], companyNames[i], companyCatchphrases[i]));
+                localUsers.Add(new User(jsonUsers.Count + (i + 1), names[i], emails[i], streets[i], cities[i], zipCodes[i], companyNames[i], companyCatchphrases[i]));
             }
+
+            return localUsers;
         }
     }
 }
