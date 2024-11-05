@@ -36,22 +36,14 @@ else
 }
 
 @code {
-    private Dictionary<string, bool> _sortByOptions = new()
-    {
-        { "Id", false },
-        { "Name", false },
-        { "Email", false }
-    };
     private bool _loadingUsers = true;
-    private bool _showAll = false;
-    private bool _sortById = false;
-    private bool _sortByName = false;
-    private bool _sortByEmail = false;
-    private string _lastButtonPressed;
+    private bool _showAllUsers = false;
+    private string _selectedSortOption = "Name";
+    private bool _sortAscending = true;
     private List<User> _locallyGeneratedUsers = new List<User>();
     private List<User> _jsonGeneratedUsers = new List<User>();
     private List<User> _allGeneratedUsers = new List<User>();
-    private string _errorMsg;
+    private string ?_errorMsg;
     private string _searchInput = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -63,6 +55,7 @@ else
             await FetchJsonDataAsync();
             GenerateLocalUsers();
             CombineUsers();
+
             StateHasChanged();
         }
     }
@@ -102,8 +95,8 @@ else
         string[] companyCatchphrases = { "Innovate Your Future", "Bringing Ideas to Life", "Where Vision Meets Reality", "Beyond the Horizon", "Empowering Possibilities", "Inspiring Growth", "Redefining Excellence", "The Future, Today", "Shaping Tomorrow", "Excellence Through Innovation" };
 
         var users = new List<User>();
-        var random = new Random();
-        int randomNumber = random.Next(0, 10);
+        // var random = new Random();
+        // int randomNumber = random.Next(0, 10);
 
         for (int i = 0; i < 10; i++)
         {
@@ -147,7 +140,7 @@ else
                 search.Email.ToLower().StartsWith(_searchInputLower) ||
                 search.Address.Street.ToLower().StartsWith(_searchInputLower) ||
                 search.Address.City.ToLower().StartsWith(_searchInputLower) ||
-                search.Address.ZipCode.ToLower().StartsWith(_searchInputLower) ||
+                search.Address.ZipCode.StartsWith(_searchInputLower) ||
                 search.Company.Name.ToLower().StartsWith(_searchInputLower) ||
                 search.Company.Catchphrase.ToLower().StartsWith(_searchInputLower))
                 .ToList();
@@ -156,104 +149,56 @@ else
         return users;
     }
 
-    //Jag vill ha någon loop här... eller en generic method kanske... jag vill bara ha en orderBy och en orderByDesc, dessa ska ta input
     private List<User> sortBySelection(List<User> users)
     {
+        switch(_selectedSortOption)
+        {
+            case "Id":
+                users = _sortAscending
+                ? users.OrderBy(user => user.Id).ToList()
+                : users.OrderByDescending(user => user.Id).ToList();
+                break;
+            case "Name":
+                users = _sortAscending
+                ? users.OrderBy(user => user.Name).ToList()
+                : users.OrderByDescending(user => user.Name).ToList();
+                break;
+            case "Email":
+                users = _sortAscending
+                ? users.OrderBy(user => user.Email).ToList()
+                : users.OrderByDescending(user => user.Email).ToList();
+                break;
+            default:
+                users.OrderBy(user => user.Name).ToList();
+                break;
+        }
+
         int showLimitedUsers = 5;
-        int? showAllUsers = _showAll ? null : showLimitedUsers;
+        int? showAllUsers = _showAllUsers ? null : showLimitedUsers;
 
-        // Dictionary<string, Func<User, object>> fetchUserData = new()
-        // {
-        //     { "Id", user => user.Id}
-        // };
-
-        // if (_sortByOptions.ContainsKey(_lastButtonPressed) && _sortByOptions[_lastButtonPressed] == true)
-        // {
-        //     return users.OrderBy(user => typeof(User).GetProperty(_lastButtonPressed)).Take(showAllUsers ?? int.MaxValue).ToList();
-        // }
-        // else if (_sortByOptions.ContainsKey(_lastButtonPressed) && _sortByOptions[_lastButtonPressed] == false)
-        // {
-        //     return users.OrderByDescending(user => typeof(User).GetProperty(_lastButtonPressed)).Take(showAllUsers ?? int.MaxValue).ToList();
-        // }
-
-        // return users;
-
-        // if (_sortById && _lastButtonPressed == "sortById")
-        // {
-        //     return users.OrderBy(user => user.Id).Take(showAllUsers ?? int.MaxValue).ToList();
-        // }
-        // else if (!_sortById && _lastButtonPressed == "sortById")
-        // {
-        //     return users.OrderByDescending(user => user.Id).Take(showAllUsers ?? int.MaxValue).ToList();
-        // }
-        // else if (_sortByName && _lastButtonPressed == "sortByName")
-        // {
-        //     return users.OrderBy(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
-        // }
-        // else if (!_sortByName && _lastButtonPressed == "sortByName")
-        // {
-        //     return users.OrderByDescending(user => user.Name).Take(showAllUsers ?? int.MaxValue).ToList();
-        // }
-        // else
-        // {
-        //     //default sortering av name efter "loading users..."
-        //     return users.orderby(user => user.name).Take(showallusers ?? int.maxvalue).tolist();
-        // }
-
-        // switch (_lastButtonPressed)
-        // {
-        //     case "Id":
-        //         // code block
-        //         break;
-        //     case "Name":
-        //         // code block
-        //         break;
-        //     default:
-        //         // code block
-        //         break;
-        // }
+        return users.Take(showAllUsers ?? int.MaxValue).ToList();
     }
 
     private void HandleShowAll()
     {
-        _showAll = !_showAll;
+        _showAllUsers = !_showAllUsers;
     }
 
     private void HandleSortBy(string option)
     {
-        if (_sortByOptions.ContainsKey(option))
+        if (_selectedSortOption == option)
         {
-            _sortByOptions[option] = !_sortByOptions[option];
-            _lastButtonPressed = option;
+            _sortAscending = !_sortAscending;
         }
-
-        // if (_sortByOptions[option] == true)
-        // {
-        //     _errorMsg = _sortByOptions[option].ToString();
-        // }
-        
+        else
+        {
+            _selectedSortOption = option;
+            _sortAscending = true;
+        }        
     }
 
     private void HandleSearch(ChangeEventArgs e)
     {
         _searchInput = e.Value?.ToString() ?? string.Empty;
     }
-
-    // private void SortById()
-    // {
-    //     _sortById = !_sortById;
-    //     _lastButtonPressed = "sortById";
-    // }
-
-    // private void SortByName()
-    // {
-    //     _sortByName = !_sortByName;
-    //     _lastButtonPressed = "sortByName";
-    // }
-
-    // private void SortByEmail()
-    // {
-    //     _sortByName = !_sortByEmail;
-    //     _lastButtonPressed = "sortByEmail";
-    // }
 }
