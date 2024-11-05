@@ -13,10 +13,10 @@ namespace BlazorLabb.Models
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
 
-        [Required]
+        [ValidateComplexType]
         public Address Address { get; set; } = new Address();
 
-        [Required]
+        [ValidateComplexType]
         public Company Company { get; set; } = new Company();
 
         public User()
