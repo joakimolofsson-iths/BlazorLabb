@@ -18,12 +18,12 @@ else
     <p style="color: red">@generateUsers.ErrorMsg</p>
 
     <div class="sortSearchContainer">
-        <button @onclick="HandleShowAll">Show All</button>
+        <button class="@(StyleSortButton("ShowAll"))" @onclick="HandleShowAll">Show All</button>
 
         <span>sort by:</span>
-        <button @onclick='() => HandleSortBy("Id")'>Id</button>
-        <button @onclick='() => HandleSortBy("Name")'>Name</button>
-        <button @onclick='() => HandleSortBy("Email")'>E-Mail</button>
+        <button class="@(StyleSortButton("Id"))" @onclick='() => HandleSortBy("Id")'>Id</button>
+        <button class="@(StyleSortButton("Name"))" @onclick='() => HandleSortBy("Name")'>Name</button>
+        <button class="@(StyleSortButton("Email"))" @onclick='() => HandleSortBy("Email")'>E-Mail</button>
 
         <input placeholder="Search..." @oninput="HandleSearch" />
     </div>
@@ -57,14 +57,6 @@ else
         }
     }
 
-    public List<User> DisplayUsers()
-    {
-        List<User> searchedUsers = SearchSortUsers.Search(users, _searchInput);
-        List<User> sortedUsers = SearchSortUsers.Selection(searchedUsers, _selectedSortOption, _sortAscending, _showAllUsers);
-
-        return sortedUsers;
-    }
-
     private void HandleShowAll()
     {
         _showAllUsers = !_showAllUsers;
@@ -80,11 +72,35 @@ else
         {
             _selectedSortOption = option;
             _sortAscending = true;
-        }        
+        }
     }
 
     private void HandleSearch(ChangeEventArgs e)
     {
         _searchInput = e.Value?.ToString() ?? string.Empty;
     }
+
+    public List<User> DisplayUsers()
+    {
+        List<User> searchedUsers = SearchSortUsers.Search(users, _searchInput);
+        List<User> sortedUsers = SearchSortUsers.Selection(searchedUsers, _selectedSortOption, _sortAscending, _showAllUsers);
+
+        return sortedUsers;
+    }
+
+    private string StyleSortButton(string option)
+    {
+        if(option == "ShowAll")
+        {
+            return _showAllUsers ? "showAll" : "";
+        }
+        if (_selectedSortOption == option)
+        {
+            return _sortAscending ? "sortButtonAscending" : "sortButtonDescending";
+        }
+
+        return "";
+    }
+
+    
 }

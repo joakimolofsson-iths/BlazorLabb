@@ -107,6 +107,8 @@ h1:focus {
     border-radius: 5px;
 }
 
+
+
 .sortSearchContainer > button {
     background: lightgrey;
     border: none;
@@ -125,6 +127,8 @@ h1:focus {
 .sortSearchContainer > input:focus {
     outline: none;
 }
+
+
 
 .userDisplayContainer {
     margin: 0;
