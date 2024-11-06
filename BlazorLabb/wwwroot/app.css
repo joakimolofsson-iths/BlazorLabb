@@ -110,9 +110,8 @@ h1:focus {
 
 
 .sortSearchContainer > button {
-    background: lightgrey;
+    background: white;
     border: none;
-    border-radius: 5px;
 }
 
 .sortSearchContainer > span {
@@ -121,11 +120,13 @@ h1:focus {
 }
 
 .sortSearchContainer > input {
+    margin-left: 10px;
     border: none;
     border-bottom: 1px solid black;
 }
 .sortSearchContainer > input:focus {
     outline: none;
+    border-bottom: 1px solid red;
 }
 
 

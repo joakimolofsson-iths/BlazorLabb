@@ -24,6 +24,11 @@ else
         <button class="@(StyleSortButton("Id"))" @onclick='() => HandleSortBy("Id")'>Id</button>
         <button class="@(StyleSortButton("Name"))" @onclick='() => HandleSortBy("Name")'>Name</button>
         <button class="@(StyleSortButton("Email"))" @onclick='() => HandleSortBy("Email")'>E-Mail</button>
+        <button class="@(StyleSortButton("Street"))" @onclick='() => HandleSortBy("Street")'>Street</button>
+        <button class="@(StyleSortButton("City"))" @onclick='() => HandleSortBy("City")'>City</button>
+        <button class="@(StyleSortButton("ZipCode"))" @onclick='() => HandleSortBy("ZipCode")'>ZIP Code</button>
+        <button class="@(StyleSortButton("CompanyName"))" @onclick='() => HandleSortBy("CompanyName")'>Company Name</button>
+        <button class="@(StyleSortButton("CompanyCatchphrase"))" @onclick='() => HandleSortBy("CompanyCatchphrase")'>Company Catchphrase</button>
 
         <input placeholder="Search..." @oninput="HandleSearch" />
     </div>

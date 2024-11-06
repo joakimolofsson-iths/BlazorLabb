@@ -1,11 +1,14 @@
 ﻿.sortSearchContainer > .sortButtonAscending {
-    outline: 1px solid lime;
+    border-top: 1px solid red;
+    margin-top: -1px;
 }
 
 .sortSearchContainer > .sortButtonDescending {
-    outline: 1px solid red;
+    border-bottom: 1px solid red;
+    margin-bottom: -1px;
 }
 
 .sortSearchContainer > .showAll {
-    outline: 1px solid lime;
+    color: red;
+    text-decoration: line-through;
 }
