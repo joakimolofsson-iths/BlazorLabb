@@ -14,14 +14,14 @@ namespace BlazorLabb.Services
             {
                 var _searchInputLower = searchInput.ToLower();
 
-                return users.Where(search => search.Id.ToString().StartsWith(_searchInputLower) ||
-                    search.Name.ToLower().StartsWith(_searchInputLower) ||
-                    search.Email.ToLower().StartsWith(_searchInputLower) ||
-                    search.Address.Street.ToLower().StartsWith(_searchInputLower) ||
-                    search.Address.City.ToLower().StartsWith(_searchInputLower) ||
-                    search.Address.ZipCode.StartsWith(_searchInputLower) ||
-                    search.Company.Name.ToLower().StartsWith(_searchInputLower) ||
-                    search.Company.Catchphrase.ToLower().StartsWith(_searchInputLower))
+                return users.Where(search => search.Id.ToString().Contains(_searchInputLower) ||
+                    search.Name.ToLower().Contains(_searchInputLower) ||
+                    search.Email.ToLower().Contains(_searchInputLower) ||
+                    search.Address.Street.ToLower().Contains(_searchInputLower) ||
+                    search.Address.City.ToLower().Contains(_searchInputLower) ||
+                    search.Address.ZipCode.Contains(_searchInputLower) ||
+                    search.Company.Name.ToLower().Contains(_searchInputLower) ||
+                    search.Company.Catchphrase.ToLower().Contains(_searchInputLower))
                     .ToList();
             }
         }
