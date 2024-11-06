@@ -4,7 +4,6 @@
 @using BlazorLabb.Components.Pages.Components
 @using BlazorLabb.Services
 @inject GenerateUsers generateUsers
-@inject NavigationManager Navigation
 
 <PageTitle>New User</PageTitle>
 
@@ -26,6 +25,14 @@ else
 @code {
     private User _newUser = new User();
     private bool _newUserSaved = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await generateUsers.GetUsersAsync();
+        }
+    }
 
     private void HandleSubmit()
     {

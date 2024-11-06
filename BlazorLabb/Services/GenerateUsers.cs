@@ -1,33 +1,39 @@
 ﻿using BlazorLabb.Components.Pages;
+using BlazorLabb.Interfaces;
 using BlazorLabb.Models;
 using System.Text.Json;
 
 namespace BlazorLabb.Services
 {
-    public class GenerateUsers
+    public class GenerateUsers : IUsers
     {
         private readonly HttpClient _httpClient;
         private static readonly JsonSerializerOptions _options = new()
         {
             PropertyNameCaseInsensitive = true
         };
-
-        public List<User> Users { get; private set; } = new();
+        private List<User> _users = new();
         public string ?ErrorMsg { get; private set; }
 
         public GenerateUsers(HttpClient httpClient) 
         {
             _httpClient = httpClient;
-            GenerateUsersAsync();
         }
 
-        private async Task GenerateUsersAsync()
+        public async Task<List<User>> GetUsersAsync()
         {
+            if(_users.Count > 0)
+            {
+                return _users;
+            }
+
             List<User> jsonUsers = await FetchJsonUsersAsync();
             List<User> localUsers = GenerateLocalUsers(jsonUsers);
 
-            Users.AddRange(jsonUsers);
-            Users.AddRange(localUsers);
+            _users.AddRange(jsonUsers);
+            _users.AddRange(localUsers);
+
+            return _users;
         }
 
         private async Task<List<User>> FetchJsonUsersAsync()
@@ -76,8 +82,8 @@ namespace BlazorLabb.Services
 
         public void AddNewUser(User user)
         {
-            user.Id = Users.Count + 1;
-            Users.Add(user);
+            user.Id = _users.Count + 1;
+            _users.Add(user);
         }
     }
 }

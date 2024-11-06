@@ -3,7 +3,6 @@
 @using BlazorLabb.Models
 @using BlazorLabb.Components.Pages.Components
 @using BlazorLabb.Services
-@implements BlazorLabb.Interfaces.IUsers
 @inject GenerateUsers generateUsers
 
 <PageTitle>Users</PageTitle>
@@ -32,7 +31,7 @@ else
     <br/>
 
     <ul class="userDisplayContainer">
-        @foreach (var user in GetUsers())
+        @foreach (var user in DisplayUsers())
         {
             <DisplayUser UserModel="user"/>
         }
@@ -45,22 +44,22 @@ else
     private string _selectedSortOption = "Name";
     private bool _sortAscending = true;
     private string _searchInput = string.Empty;
+    private List<User> users = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await Task.Delay(1000);
+            users = await generateUsers.GetUsersAsync();            
             _loadingUsers = false;
             StateHasChanged();
         }
     }
 
-    public List<User> GetUsers()
+    public List<User> DisplayUsers()
     {
-        List<User> generatedUsers = generateUsers.Users;
-
-        List<User> searchedUsers = SearchSortUsers.Search(generatedUsers, _searchInput);
+        List<User> searchedUsers = SearchSortUsers.Search(users, _searchInput);
         List<User> sortedUsers = SearchSortUsers.Selection(searchedUsers, _selectedSortOption, _sortAscending, _showAllUsers);
 
         return sortedUsers;

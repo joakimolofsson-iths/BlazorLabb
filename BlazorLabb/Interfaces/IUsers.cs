@@ -4,6 +4,6 @@ namespace BlazorLabb.Interfaces
 {
     public interface IUsers
     {
-        List<User> GetUsers();
+        Task<List<User>> GetUsersAsync();
     }
 }
