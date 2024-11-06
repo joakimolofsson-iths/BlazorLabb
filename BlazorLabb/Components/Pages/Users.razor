@@ -17,36 +17,37 @@ else
 {
     <p style="color: red">@generateUsers.ErrorMsg</p>
 
-    <div class="sortSearchContainer">
+    <div class="showSearchContainer">
         <button class="@(StyleSortButton("ShowAll"))" @onclick="HandleShowAll">Show All</button>
-
-        <span>sort by:</span>
-        <button class="@(StyleSortButton("Id"))" @onclick='() => HandleSortBy("Id")'>Id</button>
-        <button class="@(StyleSortButton("Name"))" @onclick='() => HandleSortBy("Name")'>Name</button>
-        <button class="@(StyleSortButton("Email"))" @onclick='() => HandleSortBy("Email")'>E-Mail</button>
-        <button class="@(StyleSortButton("Street"))" @onclick='() => HandleSortBy("Street")'>Street</button>
-        <button class="@(StyleSortButton("City"))" @onclick='() => HandleSortBy("City")'>City</button>
-        <button class="@(StyleSortButton("ZipCode"))" @onclick='() => HandleSortBy("ZipCode")'>ZIP Code</button>
-        <button class="@(StyleSortButton("CompanyName"))" @onclick='() => HandleSortBy("CompanyName")'>Company Name</button>
-        <button class="@(StyleSortButton("CompanyCatchphrase"))" @onclick='() => HandleSortBy("CompanyCatchphrase")'>Company Catchphrase</button>
-
         <input placeholder="Search..." @oninput="HandleSearch" />
     </div>
 
     <br/>
 
-    <ul class="userDisplayContainer">
-        @foreach (var user in DisplayUsers())
-        {
-            <DisplayUser UserModel="user"/>
-        }
-    </ul>
+    <CascadingValue Value="SelectedSortOption">
+        <ul class="userDisplayContainer">
+            <li class="sortContainer">
+                <p class="@(StyleSortButton("Id"))" @onclick='() => HandleSortBy("Id")' style="width:60px">Id</p>
+                <p class="@(StyleSortButton("Name"))" @onclick='() => HandleSortBy("Name")'>Name</p>
+                <p class="@(StyleSortButton("Email"))" @onclick='() => HandleSortBy("Email")' style="width:300px">Email</p>
+                <p class="@(StyleSortButton("Street"))" @onclick='() => HandleSortBy("Street")'>Street</p>
+                <p class="@(StyleSortButton("City"))" @onclick='() => HandleSortBy("City")'>City</p>
+                <p class="@(StyleSortButton("ZipCode"))" @onclick='() => HandleSortBy("ZipCode")' style="width:150px">ZipCode</p>
+                <p class="@(StyleSortButton("CompanyName"))" @onclick='() => HandleSortBy("CompanyName")'>Co.Name</p>
+                <p class="@(StyleSortButton("CompanyCatchphrase"))" @onclick='() => HandleSortBy("CompanyCatchphrase")' style="width:300px">Co.Catchphrase</p>
+            </li>
+            @foreach (var user in DisplayUsers())
+            {
+                <DisplayUser UserModel="user" />
+            }
+        </ul>
+    </CascadingValue Value>
 }
 
 @code {
     private bool _loadingUsers = true;
     private bool _showAllUsers = false;
-    private string _selectedSortOption = "Name";
+    public string SelectedSortOption { get; set; } = "Name";
     private bool _sortAscending = true;
     private string _searchInput = string.Empty;
     private List<User> users = new();
@@ -69,13 +70,13 @@ else
 
     private void HandleSortBy(string option)
     {
-        if (_selectedSortOption == option)
+        if (SelectedSortOption == option)
         {
             _sortAscending = !_sortAscending;
         }
         else
         {
-            _selectedSortOption = option;
+            SelectedSortOption = option;
             _sortAscending = true;
         }
     }
@@ -88,7 +89,7 @@ else
     public List<User> DisplayUsers()
     {
         List<User> searchedUsers = SearchSortUsers.Search(users, _searchInput);
-        List<User> sortedUsers = SearchSortUsers.Selection(searchedUsers, _selectedSortOption, _sortAscending, _showAllUsers);
+        List<User> sortedUsers = SearchSortUsers.Selection(searchedUsers, SelectedSortOption, _sortAscending, _showAllUsers);
 
         return sortedUsers;
     }
@@ -99,13 +100,12 @@ else
         {
             return _showAllUsers ? "showAll" : "";
         }
-        if (_selectedSortOption == option)
+
+        if (SelectedSortOption == option)
         {
             return _sortAscending ? "sortButtonAscending" : "sortButtonDescending";
         }
 
         return "";
     }
-
-    
 }

@@ -1,17 +1,30 @@
 ﻿@using BlazorLabb.Models
 
 <li>
-    <p style="width:60px">@UserModel.Id</p>
-    <p>@UserModel.Name</p>
-    <p style="width:300px">@UserModel.Email</p>
-    <p>@UserModel.Address.Street</p>
-    <p>@UserModel.Address.City</p>
-    <p style="width:150px">@UserModel.Address.ZipCode</p>
-    <p>@UserModel.Company.Name</p>
-    <p style="width:300px">@UserModel.Company.Catchphrase</p>
+    <p class="@(HighlightSortedText("Id"))" style="width:60px">@UserModel.Id</p>
+    <p class="@(HighlightSortedText("Name"))">@UserModel.Name</p>
+    <p class="@(HighlightSortedText("Email"))" style="width:300px">@UserModel.Email</p>
+    <p class="@(HighlightSortedText("Street"))">@UserModel.Address.Street</p>
+    <p class="@(HighlightSortedText("City"))">@UserModel.Address.City</p>
+    <p class="@(HighlightSortedText("ZipCode"))" style="width:150px">@UserModel.Address.ZipCode</p>
+    <p class="@(HighlightSortedText("CompanyName"))">@UserModel.Company.Name</p>
+    <p class="@(HighlightSortedText("CompanyCatchphrase"))" style="width:300px">@UserModel.Company.Catchphrase</p>
 </li>
 
 @code {
-	[Parameter]
-	public User UserModel { get; set; }
+    [Parameter]
+    public User UserModel { get; set; }
+
+    [CascadingParameter]
+    public string SelectedSortOption { get; set; }
+
+    private string HighlightSortedText(string option)
+    {
+        if (SelectedSortOption == option)
+        {
+            return "highlightSortedText";
+        }
+
+        return "";
+    }
 }
