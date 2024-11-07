@@ -146,6 +146,7 @@ h1:focus {
 }
 .newUserInput:focus {
     outline: none;
+    border-bottom: 1px solid red;
 }
 
 .newUserInputButton {
@@ -202,6 +203,7 @@ h1:focus {
 
 .userDisplayContainer > li:last-child {
     border-bottom: 1px solid grey;
+    margin-bottom: 20px;
 }
 
 .userDisplayContainer > li > p {
@@ -220,4 +222,13 @@ h1:focus {
     padding: 0;
     margin: 0;
     border: none;
+}
+
+
+
+.highlightMatchingText {
+    background: red;
+    color: white;
+    font-weight: bold;
+    text-decoration: underline;
 }

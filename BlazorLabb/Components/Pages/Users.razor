@@ -24,7 +24,7 @@ else
 
     <br/>
 
-    <CascadingValue Value="SelectedSortOption">
+    <CascadingValue Value="(SelectedSortOption, SearchInput)">
         <ul class="userDisplayContainer">
             <li class="sortContainer">
                 <p class="@(StyleSortButton("Id")) special" @onclick='() => HandleSortBy("Id")' style="width:60px">Id</p>
@@ -41,16 +41,17 @@ else
                 <DisplayUser UserModel="user" />
             }
         </ul>
-    </CascadingValue Value>
+    </CascadingValue>
 }
 
 @code {
     private bool _loadingUsers = true;
     private bool _showAllUsers = false;
-    public string SelectedSortOption { get; set; } = "Name";
     private bool _sortAscending = true;
-    private string _searchInput = string.Empty;
     private List<User> users = new();
+
+    public string SelectedSortOption { get; set; } = "Name";
+    public string SearchInput { get; set; } = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -83,12 +84,12 @@ else
 
     private void HandleSearch(ChangeEventArgs e)
     {
-        _searchInput = e.Value?.ToString() ?? string.Empty;
+        SearchInput = e.Value?.ToString() ?? string.Empty;
     }
 
     public List<User> DisplayUsers()
     {
-        List<User> searchedUsers = SearchSortUsers.Search(users, _searchInput);
+        List<User> searchedUsers = SearchSortUsers.Search(users, SearchInput);
         List<User> sortedUsers = SearchSortUsers.Selection(searchedUsers, SelectedSortOption, _sortAscending, _showAllUsers);
 
         return sortedUsers;

@@ -13,12 +13,10 @@ namespace BlazorLabb.Services
                 return users;
             }
 
-            var searchInputLower = searchInput.ToLower();
-
-            return users.Where(user => MatchSearchWithData(user, searchInputLower)).ToList();
+            return users.Where(user => MatchSearchWithData(user, searchInput)).ToList();
         }
 
-        private static bool MatchSearchWithData(User user, string searchInputLower)
+        private static bool MatchSearchWithData(User user, string searchInput)
         {
             var propertiesToSearch = new List<string>
             {
@@ -32,7 +30,7 @@ namespace BlazorLabb.Services
                 user.Company.Catchphrase
             };
 
-            return propertiesToSearch.Any(userData => userData.ToLower().Contains(searchInputLower));
+            return propertiesToSearch.Any(userData => userData.Contains(searchInput, StringComparison.OrdinalIgnoreCase));
         }
 
         public static List<User> Selection(List<User> users, string selectedSortOption, bool sortAscending, bool showAllUsers)

@@ -1,14 +1,14 @@
 ﻿@using BlazorLabb.Models
 
 <li>
-    <p class="@(HighlightSortedText("Id"))" style="width:60px">@UserModel.Id</p>
-    <p class="@(HighlightSortedText("Name"))">@UserModel.Name</p>
-    <p class="@(HighlightSortedText("Email"))" style="width:300px">@UserModel.Email</p>
-    <p class="@(HighlightSortedText("Street"))">@UserModel.Address.Street</p>
-    <p class="@(HighlightSortedText("City"))">@UserModel.Address.City</p>
-    <p class="@(HighlightSortedText("ZipCode"))" style="width:150px">@UserModel.Address.ZipCode</p>
-    <p class="@(HighlightSortedText("CompanyName"))">@UserModel.Company.Name</p>
-    <p class="@(HighlightSortedText("CompanyCatchphrase"))" style="width:320px">@UserModel.Company.Catchphrase</p>
+    <p class="@(HighlightSortedText("Id"))" style="width:60px">@(GetHighlightedText(UserModel.Id.ToString()))</p>
+    <p class="@(HighlightSortedText("Name"))">@(GetHighlightedText(UserModel.Name))</p>
+    <p class="@(HighlightSortedText("Email"))" style="width:300px">@(GetHighlightedText(UserModel.Email))</p>
+    <p class="@(HighlightSortedText("Street"))">@(GetHighlightedText(UserModel.Address.Street))</p>
+    <p class="@(HighlightSortedText("City"))">@(GetHighlightedText(UserModel.Address.City))</p>
+    <p class="@(HighlightSortedText("ZipCode"))" style="width:150px">@(GetHighlightedText(UserModel.Address.ZipCode))</p>
+    <p class="@(HighlightSortedText("CompanyName"))">@(GetHighlightedText(UserModel.Company.Name))</p>
+    <p class="@(HighlightSortedText("CompanyCatchphrase"))" style="width:320px">@(GetHighlightedText(UserModel.Company.Catchphrase))</p>
 </li>
 
 @code {
@@ -16,15 +16,35 @@
     public User UserModel { get; set; }
 
     [CascadingParameter]
-    public string SelectedSortOption { get; set; }
+    public (string SelectedSortOption, string SearchInput) FromParent { get; set; }
 
     private string HighlightSortedText(string option)
     {
-        if (SelectedSortOption == option)
+        if (FromParent.SelectedSortOption == option)
         {
             return "highlightSortedText";
         }
 
         return "";
+    }
+
+    private MarkupString GetHighlightedText(string text)
+    {
+        if (string.IsNullOrWhiteSpace(FromParent.SearchInput) || string.IsNullOrWhiteSpace(text))
+        {
+            return new MarkupString(text);
+        }
+
+        int index = text.IndexOf(FromParent.SearchInput, StringComparison.OrdinalIgnoreCase);
+        if (index == -1)
+        {
+            return new MarkupString(text);
+        }
+        
+        string textBefore = text.Substring(0, index);
+        string matchedText = text.Substring(index, FromParent.SearchInput.Length);
+        string textAfter = text.Substring(index + FromParent.SearchInput.Length);
+
+        return new MarkupString($"{textBefore}<span class='highlightMatchingText'>{matchedText}</span>{textAfter}");
     }
 }
