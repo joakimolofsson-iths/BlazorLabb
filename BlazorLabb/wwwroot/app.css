@@ -61,31 +61,78 @@ h1:focus {
     display: block;
 }
 
-.myPage .myTitle {
+.navContainer {
+    position: relative;
+    width: 100%;
+    height: 165px;
+    margin-bottom: 10px;
+}
+
+.navContainer .titleContainer {
+    position: absolute;
+    width: 755px;
+    perspective: 1000px;
+    padding-left: 35px;
+}
+
+.navContainer .titleContainer .title {
+    position: absolute;
     font-size: 120px;
     font-weight: bold;
-    margin: 0 0 0 30px;
+    margin: 0;
+    padding: 0;
+    z-index: 100;
 }
 
-.myPage .mySidebar {
+.navContainer .titleContainer .titleTwo {
+    color: red;
+    opacity: 0.5;
+    transform-origin: left bottom;
+    animation: warp 2s infinite;
+    z-index: 10;
+}
+@keyframes warp {
+    0%, 100% {
+        transform: skew(0deg, 0deg) scale(1, 1);
+    }
+
+    25% {
+        transform: skew(0deg, 0deg) scale(1, 1);
+    }
+
+    41% {
+        transform: skew(10deg, 1deg) scale(1.1, 1);
+    }
+
+    57% {
+        transform: skew(-20deg, -1deg) scale(1.05, 1.05);
+    }
+
+    73% {
+        transform: skew(20deg, 0.5deg) scale(1.2, 1);    
+    }
+}
+
+.navContainer .navBar {
+    position: absolute;
+    bottom: 0;
     width: 100%;
     padding-left: 35px;
-    margin: -10px 0 15px 0;
 }
 
-.myPage .mySidebar .myNav-link {
+.navContainer .navBar .myNav-link {
     font-size: 20px;
     color: black;
     text-decoration: none;
     margin-right: 20px;
 }
 
-.myPage .mySidebar .active {
+.navContainer .navBar .active {
     color: red;
     text-decoration: line-through;
 }
 
-.myPage .mySidebar a:hover {
+.navContainer .navBar a:hover {
     color: red;
 }
 
