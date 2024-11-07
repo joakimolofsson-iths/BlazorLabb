@@ -1,14 +1,14 @@
 ﻿@using BlazorLabb.Models
 
 <li>
-    <p class="@(HighlightSortedText("Id"))" style="width:60px">@(GetHighlightedText(UserModel.Id.ToString()))</p>
-    <p class="@(HighlightSortedText("Name"))">@(GetHighlightedText(UserModel.Name))</p>
-    <p class="@(HighlightSortedText("Email"))" style="width:300px">@(GetHighlightedText(UserModel.Email))</p>
-    <p class="@(HighlightSortedText("Street"))">@(GetHighlightedText(UserModel.Address.Street))</p>
-    <p class="@(HighlightSortedText("City"))">@(GetHighlightedText(UserModel.Address.City))</p>
-    <p class="@(HighlightSortedText("ZipCode"))" style="width:150px">@(GetHighlightedText(UserModel.Address.ZipCode))</p>
-    <p class="@(HighlightSortedText("CompanyName"))">@(GetHighlightedText(UserModel.Company.Name))</p>
-    <p class="@(HighlightSortedText("CompanyCatchphrase"))" style="width:320px">@(GetHighlightedText(UserModel.Company.Catchphrase))</p>
+    <p class="@(HighlightSortedText("Id"))" style="width:60px">@(HighlightSearchedText(UserModel.Id.ToString()))</p>
+    <p class="@(HighlightSortedText("Name"))">@(HighlightSearchedText(UserModel.Name))</p>
+    <p class="@(HighlightSortedText("Email"))" style="width:300px">@(HighlightSearchedText(UserModel.Email))</p>
+    <p class="@(HighlightSortedText("Street"))">@(HighlightSearchedText(UserModel.Address.Street))</p>
+    <p class="@(HighlightSortedText("City"))">@(HighlightSearchedText(UserModel.Address.City))</p>
+    <p class="@(HighlightSortedText("ZipCode"))" style="width:150px">@(HighlightSearchedText(UserModel.Address.ZipCode))</p>
+    <p class="@(HighlightSortedText("CompanyName"))">@(HighlightSearchedText(UserModel.Company.Name))</p>
+    <p class="@(HighlightSortedText("CompanyCatchphrase"))" style="width:320px">@(HighlightSearchedText(UserModel.Company.Catchphrase))</p>
 </li>
 
 @code {
@@ -28,7 +28,7 @@
         return "";
     }
 
-    private MarkupString GetHighlightedText(string text)
+    private MarkupString HighlightSearchedText(string text)
     {
         if (string.IsNullOrWhiteSpace(FromParent.SearchInput) || string.IsNullOrWhiteSpace(text))
         {
@@ -45,6 +45,6 @@
         string matchedText = text.Substring(index, FromParent.SearchInput.Length);
         string textAfter = text.Substring(index + FromParent.SearchInput.Length);
 
-        return new MarkupString($"{textBefore}<span class='highlightMatchingText'>{matchedText}</span>{textAfter}");
+        return new MarkupString($"{textBefore}<span class='highlightSearchedText'>{matchedText}</span>{textAfter}");
     }
 }

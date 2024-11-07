@@ -226,7 +226,7 @@ h1:focus {
 
 
 
-.highlightMatchingText {
+.highlightSearchedText {
     background: red;
     color: white;
     font-weight: bold;
