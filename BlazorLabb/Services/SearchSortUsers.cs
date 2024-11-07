@@ -1,4 +1,5 @@
-﻿using BlazorLabb.Models;
+﻿using BlazorLabb.Components.Pages;
+using BlazorLabb.Models;
 using System.Reflection.Emit;
 
 namespace BlazorLabb.Services
@@ -11,20 +12,27 @@ namespace BlazorLabb.Services
             {
                 return users;
             }
-            else
-            {
-                var _searchInputLower = searchInput.ToLower();
 
-                return users.Where(search => search.Id.ToString().Contains(_searchInputLower) ||
-                    search.Name.ToLower().Contains(_searchInputLower) ||
-                    search.Email.ToLower().Contains(_searchInputLower) ||
-                    search.Address.Street.ToLower().Contains(_searchInputLower) ||
-                    search.Address.City.ToLower().Contains(_searchInputLower) ||
-                    search.Address.ZipCode.Contains(_searchInputLower) ||
-                    search.Company.Name.ToLower().Contains(_searchInputLower) ||
-                    search.Company.Catchphrase.ToLower().Contains(_searchInputLower))
-                    .ToList();
-            }
+            var searchInputLower = searchInput.ToLower();
+
+            return users.Where(user => MatchSearchWithData(user, searchInputLower)).ToList();
+        }
+
+        private static bool MatchSearchWithData(User user, string searchInputLower)
+        {
+            var propertiesToSearch = new List<string>
+            {
+                user.Id.ToString(),
+                user.Name,
+                user.Email,
+                user.Address.Street,
+                user.Address.City,
+                user.Address.ZipCode,
+                user.Company.Name,
+                user.Company.Catchphrase
+            };
+
+            return propertiesToSearch.Any(userData => userData.ToLower().Contains(searchInputLower));
         }
 
         public static List<User> Selection(List<User> users, string selectedSortOption, bool sortAscending, bool showAllUsers)
