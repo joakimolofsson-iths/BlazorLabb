@@ -27,7 +27,7 @@ else
     <CascadingValue Value="SelectedSortOption">
         <ul class="userDisplayContainer">
             <li class="sortContainer">
-                <p class="@(StyleSortButton("Id"))" @onclick='() => HandleSortBy("Id")' style="width:60px">Id</p>
+                <p class="@(StyleSortButton("Id")) special" @onclick='() => HandleSortBy("Id")' style="width:60px">Id</p>
                 <p class="@(StyleSortButton("Name"))" @onclick='() => HandleSortBy("Name")'>Name</p>
                 <p class="@(StyleSortButton("Email"))" @onclick='() => HandleSortBy("Email")' style="width:300px">E-mail</p>
                 <p class="@(StyleSortButton("Street"))" @onclick='() => HandleSortBy("Street")'>Street</p>

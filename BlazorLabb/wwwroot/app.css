@@ -175,8 +175,10 @@ h1:focus {
     margin-bottom: 10px;
     border-bottom: 1px solid grey;
 }
+
 .sortContainer > p {
     cursor: pointer;
+    user-select: none;
 }
 
 
