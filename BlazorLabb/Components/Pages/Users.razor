@@ -4,6 +4,7 @@
 @using BlazorLabb.Components.Pages.Components
 @using BlazorLabb.Services
 @inject GenerateUsers generateUsers
+@inject ApiUsers apiUsers
 
 <PageTitle>Users</PageTitle>
 
@@ -15,7 +16,7 @@
 }
 else
 {
-    <p style="color: red">@generateUsers.ErrorMsg</p>
+    <p style="color: red">@apiUsers.ErrorMsg</p>
 
     <div class="showSearchContainer">
         <button class="@(StyleSortButton("ShowAll"))" @onclick="HandleShowAll">Show All</button>
@@ -58,7 +59,7 @@ else
         if (firstRender)
         {
             await Task.Delay(1000);
-            users = await generateUsers.GetUsersAsync();            
+            users = await generateUsers.GenerateUsersAsync();
             _loadingUsers = false;
             StateHasChanged();
         }

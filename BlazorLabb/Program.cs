@@ -14,7 +14,9 @@ namespace BlazorLabb
                 .AddInteractiveServerComponents();
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://jsonplaceholder.typicode.com/") });
-            builder.Services.AddScoped<GenerateUsers>();
+			builder.Services.AddScoped<ApiUsers>();
+			builder.Services.AddScoped<LocalUsers>();
+			builder.Services.AddScoped<GenerateUsers>();
 
             var app = builder.Build();
 
